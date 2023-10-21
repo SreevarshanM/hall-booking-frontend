@@ -28,7 +28,7 @@ function StudentDashboardHallBookingBookingForm() {
             prev: () => <span>Previous</span>,
             next: () => <span>Next</span>,
         },
-        datepickerClassNames: "top-12",
+        datepickerclassNames: "top-12",
         defaultDate: new Date("2022-01-01"),
         language: "en",
         disabledDates: [],
@@ -60,20 +60,20 @@ function StudentDashboardHallBookingBookingForm() {
     }
 
     return (
-        <div class="sm:p-14 p-3 bg-zinc-100">
+        <div className="sm:p-14 p-3 bg-zinc-100">
             <div className="text-sm sm:text-lg">Fill the following details and click submit to book the hall</div>
 
-            <form class="py-10 sm:pr-20">
-                <table class="table-auto w-full">
+            <form className="py-10 sm:pr-20">
+                <table className="table-auto w-full">
                     <tbody>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DEPARTMENT
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DEPARTMENT
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
-                                <select id="email" class="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
+                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
                                     <option>Department of Mathematics</option>
                                     <option>Department of Computer Science</option>
                                     <option>Department of Information Science and Technology</option>
@@ -81,13 +81,13 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">HALL FOR BOOKING
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">HALL FOR BOOKING
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
-                                <select id="email" class="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
+                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
                                     <option>Lecture Hall No. 78</option>
                                     <option>Lecture Hall No. 201</option>
                                     <option>Vivekanandha Auditorium</option>
@@ -95,13 +95,13 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">AFFILIATED DEPARTMENT/ CLUB
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">AFFILIATED DEPARTMENT/ CLUB
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
-                                <select id="email" class="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
+                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
                                     <option>CSAU Club</option>
                                     <option>Department of Computer Science</option>
                                     <option>Department of Information Science and Technology</option>
@@ -109,9 +109,9 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DATE
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DATE
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
@@ -119,9 +119,9 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME FROM
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME FROM
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
@@ -129,9 +129,9 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME TO
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME TO
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td>
@@ -139,9 +139,9 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                         </tr>
                         <tr>
-                            <td class="w-1/6 sm:w-1/3 p-4 align-top">
-                                <label class="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">REASON
-                                    <label class="mx-3 font-bold">:</label>
+                            <td className="w-1/6 sm:w-1/3 p-4 align-top">
+                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">REASON
+                                    <label className="mx-3 font-bold">:</label>
                                 </label>
                             </td>
                             <td className="pt-4">
@@ -152,7 +152,7 @@ function StudentDashboardHallBookingBookingForm() {
                 </table>
 
 
-                <button type="submit" class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center">Book Hall</button>
+                <button type="submit" className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center">Book Hall</button>
             </form>
 
         </div>

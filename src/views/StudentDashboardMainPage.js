@@ -3,7 +3,7 @@ import StudentDashboardMain from "../components/student_dashboard_main";
 
 function StudentDashboardMainPage(props) {
     return (
-        <div class="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row">
             <StudentDashboardSidebar data={props.data} />
             <StudentDashboardMain />
         </div>

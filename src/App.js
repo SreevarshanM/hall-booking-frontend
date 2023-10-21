@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Header from './components/Header';
@@ -14,9 +13,10 @@ import StudentDashboardHallAvailability from './views/StudentDashboardHallAvaila
 function App() {
   return (
     <div>
-      <Header />
+      <Header data={{ flag: window.location.pathname === "/" ? true : false }} />
       <BrowserRouter>
         <Routes>
+          <Route path="" element={<HomePageCenterContent />} />
           <Route path="login" element={<LoginCenterContent />} />
           <Route path="register" element={<RegisterCenterContent />} />
           <Route path="student/dashboard" element={<StudentDashboardMainPage data={"dashboard"} />} />

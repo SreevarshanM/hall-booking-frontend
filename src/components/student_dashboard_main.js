@@ -1,14 +1,14 @@
 function StudentDashboardMain() {
     return (
-        <div class="p-5 md:p-10 md:pl-16 pb-20 bg-neutral-100 w-full text-base">
-            <div class="text-4xl font-bold mb-5">
+        <div className="p-5 md:p-10 md:pl-16 pb-20 bg-neutral-100 w-full text-base">
+            <div className="text-4xl font-bold mb-5">
                 HALLS BOOKING
             </div>
             <div>
-                <a class="text-sky-500 hover:underline hover:cursor-pointer">click here</a> to check the availability of halls.
+                <a className="text-sky-500 hover:underline hover:cursor-pointer" href="/student/dashboard/hall_availability">click here</a> to check the availability of halls.
                 <br></br>
                 Hall Bookings can be made for the following halls,
-                <ol class="m-6 list-decimal ">
+                <ol className="m-6 list-decimal ">
                     <li>Drawing Hall No. 48</li>
                     <li>Drawing Hall No. 49</li>
                     <li>Vivekanandha Auditorium</li>
@@ -19,8 +19,8 @@ function StudentDashboardMain() {
                     <li>Srinivasa Ramanujan Seminar Hall</li>
                 </ol>
 
-                <div class="font-bold mb-5">Steps to book a hall : </div>
-                <ul class="ml-6 list-disc">
+                <div className="font-bold mb-5">Steps to book a hall : </div>
+                <ul className="ml-6 list-disc">
                     <li>Check the calendar for the availability of the halls on specific dates</li>
                     <li>Click "Add new request" and fill in the form and submit</li>
                     <li>You will receive an email upon submitting this form with regard to further action
