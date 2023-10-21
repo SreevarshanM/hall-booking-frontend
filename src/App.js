@@ -7,6 +7,9 @@ import HomePageCenterContent from './components/HomePageCenterContent';
 import LoginCenterContent from './components/LoginCenterContent';
 import RegisterCenterContent from './components/RegisterCenterContent';
 import StudentDashboardMainPage from './views/StudentDashboardMainPage';
+import StudentDashboardHallBookingMainPage from './views/StudentDashboardHallBookingMain';
+import StudentDashboardPendingRequests from './views/StudentDashboardPendingRequests';
+import StudentDashboardHallAvailability from './views/StudentDashboardHallAvailability';
 
 function App() {
   return (
@@ -16,7 +19,10 @@ function App() {
         <Routes>
           <Route path="login" element={<LoginCenterContent />} />
           <Route path="register" element={<RegisterCenterContent />} />
-          <Route path="student/dashboard" element={<StudentDashboardMainPage />} />
+          <Route path="student/dashboard" element={<StudentDashboardMainPage data={"dashboard"} />} />
+          <Route path="student/dashboard/hall_booking" element={<StudentDashboardHallBookingMainPage data={"hall_booking"} />} />
+          <Route path="student/dashboard/pending_requests" element={<StudentDashboardPendingRequests data={"pending_requests"} />} />
+          <Route path="student/dashboard/hall_availability" element={<StudentDashboardHallAvailability data={"hall_availability"} />} />
         </Routes>
       </BrowserRouter>
       <Footer />

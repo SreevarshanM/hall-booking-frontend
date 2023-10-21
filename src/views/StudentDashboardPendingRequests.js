@@ -1,13 +1,13 @@
+import StudentPendingRequests from "../components/student_dashboard_pending_requests";
 import StudentDashboardSidebar from "../components/student_dashboard_sidebar";
-import StudentDashboardMain from "../components/student_dashboard_main";
 
-function StudentDashboardMainPage(props) {
+function StudentDashboardPendingRequests(props) {
     return (
         <div class="flex flex-col md:flex-row">
             <StudentDashboardSidebar data={props.data} />
-            <StudentDashboardMain />
+            <StudentPendingRequests />
         </div>
     );
 }
 
-export default StudentDashboardMainPage;
+export default StudentDashboardPendingRequests;

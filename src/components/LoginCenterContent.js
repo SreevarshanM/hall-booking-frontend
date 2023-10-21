@@ -27,7 +27,7 @@ function LoginCenterContent() {
                             </div>
                             <div class="flex items-center justify-center">
                                 <p class="text-sm font-light text-gray-500">
-                                    Don’t have an account yet? <a href="#" class="font-medium text-sky-500 hover:underline">Register</a>
+                                    Don’t have an account yet? <a href="/register" class="font-medium text-sky-500 hover:underline">Register</a>
                                 </p>
                             </div>
                             <button type="submit" class="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center">Login</button>
