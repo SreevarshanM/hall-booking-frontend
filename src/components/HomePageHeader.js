@@ -5,19 +5,16 @@ function HomePageHeader() {
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul className="font-medium text-white flex flex-col p-4 items-center md:p-0 mt-4 md:flex-row md:space-x-8">
                         <li>
-                            <a href="#" className=""><i className="fa-solid fa-house text-3xl"></i></a>
+                            <a href="/" className=""><i className="fa-solid fa-house text-3xl"></i></a>
                         </li>
                         <li>
-                            <a href="#" className="hover:underline hover:underline-offset-4">CALENDAR</a>
+                            <a href="/calendar" className="hover:underline hover:underline-offset-4">CALENDAR</a>
                         </li>
                         <li>
-                            <a href="#" className="hover:underline hover:underline-offset-4">ADMIN</a>
+                            <a href="/admin_login" className="hover:underline hover:underline-offset-4">ADMIN</a>
                         </li>
                         <li>
-                            <a href="#" className="hover:underline hover:underline-offset-4">HALL DETAILS</a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:underline hover:underline-offset-4">ABOUT</a>
+                            <a href="/hall_details" className="hover:underline hover:underline-offset-4">HALL DETAILS</a>
                         </li>
                     </ul>
                 </div>

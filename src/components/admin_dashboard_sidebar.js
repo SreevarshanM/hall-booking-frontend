@@ -1,16 +1,14 @@
 import dashboard_icon_grey from "../assests/dashboard_icon_grey.png";
 import dashboard_icon_white from "../assests/dashboard_icon_white.png";
-import hall_icon_grey from "../assests/hall_icon_grey.png";
-import hall_icon_white from "../assests/hall_icon_white.png";
-import calendar_icon_grey from "../assests/calendar_icon_grey.png";
 import calendar_icon_white from "../assests/calendar_icon_white.png";
+import calendar_icon_grey from "../assests/calendar_icon_grey.png";
 import message_icon_grey from "../assests/message_icon_grey.png";
 import message_icon_white from "../assests/message_icon_white.png";
 import logout_icon_grey from "../assests/logout_icon_grey.png";
-import profile from "../assests/email_id_input.png";
+import profile from "../assests/admin_profile_icon.png";
 import { useState } from "react";
 
-function StudentDashboardSidebar(props) {
+function AdminDashboardSidebar(props) {
     const styles = {
         backgroundColor: 'rgb(14, 165, 233)',
         color: "rgb(255, 255, 255)"
@@ -34,28 +32,22 @@ function StudentDashboardSidebar(props) {
                         SREE VARSHAN
                     </div>
                 </div>
-                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "dashboard" ? styles : {}} href="/student/dashboard">
+                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "dashboard" ? styles : {}} href="/admin/dashboard">
                     <div className="flex items-center">
                         <img src={props.data === "dashboard" ? dashboard_icon_white : dashboard_icon_grey} className="h-5 w-5 mr-2" alt="dashboard-icon"></img>
                         <div className="text-grey">Dashboard</div>
                     </div>
                 </a>
-                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "hall_availability" ? styles : {}} href="/student/dashboard/hall_availability">
+                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "hall_availability" ? styles : {}} href="/admin/dashboard/hall_availability">
                     <div className="flex items-center">
-                        <img src={props.data === "hall_availability" ? hall_icon_white : hall_icon_grey} className="h-5 w-5 mr-2" alt="hall-icon"></img>
+                        <img src={props.data === "hall_availability" ? calendar_icon_white : calendar_icon_grey} className="h-5 w-5 mr-2" alt="hall-icon"></img>
                         <div className="text-grey">Hall Availability</div>
                     </div>
                 </a>
-                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "hall_booking" ? styles : {}} href="/student/dashboard/hall_booking">
-                    <div className="flex items-center">
-                        <img src={props.data === "hall_booking" ? calendar_icon_white : calendar_icon_grey} className="h-5 w-5 mr-2" alt="calendar-icon"></img>
-                        <div className="text-grey">Hall Booking</div>
-                    </div>
-                </a>
-                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "pending_requests" ? styles : {}} href="/student/dashboard/pending_requests">
+                <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "pending_requests" ? styles : {}} href="/admin/dashboard/pending_requests">
                     <div className="flex items-center">
                         <img src={props.data === "pending_requests" ? message_icon_white : message_icon_grey} className="h-5 w-5 mr-2" alt="message-icon"></img>
-                        <div className="text-grey">Booking Status</div>
+                        <div className="text-grey">Pending Requests</div>
                     </div>
                 </a>
             </nav>
@@ -84,11 +76,11 @@ function StudentDashboardSidebar(props) {
                                     {/*footer*/}
                                     <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b">
                                         <button
-                                            className="text-red-500 background-transparent font-semibold px-4 py-2 text-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            className="text-red-500 hover:bg-red-100 rounded font-semibold px-4 py-2 text-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="button"
                                             onClick={() => setShowModal(false)}
                                         >
-                                            Close
+                                            No
                                         </button>
                                         <a
                                             className="bg-sky-500 text-white hover:bg-sky-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -96,7 +88,7 @@ function StudentDashboardSidebar(props) {
                                             href="/"
                                             onClick={() => setShowModal(false)}
                                         >
-                                            Save Changes
+                                            Yes
                                         </a>
                                     </div>
                                 </div>
@@ -110,4 +102,4 @@ function StudentDashboardSidebar(props) {
     );
 }
 
-export default StudentDashboardSidebar;
+export default AdminDashboardSidebar;

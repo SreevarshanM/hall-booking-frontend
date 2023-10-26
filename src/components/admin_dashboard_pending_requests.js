@@ -1,7 +1,11 @@
-function StudentDashboardPendingRequests(props) {
+function AdminPendingRequests() {
+    const func = () => {
+        console.log("varun");
+    }
+
     return (
-       <div className="bg-neutral-100 w-full">
-             <nav className="bg-white border-gray-200">
+        <div className="bg-neutral-100 w-full">
+            <nav className="bg-white border-gray-200">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <div className="flex items-center flex-wrap">
                         <span className="self-center mr-4 text-md md:text-2xl font-bold whitespace-nowrap">REQUESTS : </span>
@@ -35,7 +39,7 @@ function StudentDashboardPendingRequests(props) {
             <div className="p-4 sm:p-10">
                 <ul>
                     <li className="p-2">
-                        <div className="block w-full p-4 bg-[#37b317] rounded-lg shadow-lg hover:bg-[#31a314] hover:cursor-default">
+                        <div className="block w-full p-4 bg-[#37b317] rounded-lg shadow-lg hover:bg-[#31a314] hover:cursor-pointer">
                             <h5 className="mb-2 text-xl font-bold tracking-tight">LECTURE HALL ROOM NO. 85 | 22/08/2023 | 5.00 PM TO 6.00 PM</h5>
                             <div className="flex justify-between items-end">
                                 <div className="font-normal text-black text-sm">
@@ -53,7 +57,7 @@ function StudentDashboardPendingRequests(props) {
                         </div>
                     </li>
                     <li className="p-2">
-                        <div className="block w-full p-4 bg-[#fe3233] rounded-lg shadow-lg hover:bg-[#f0292a] hover:cursor-default">
+                        <div className="block w-full p-4 bg-[#fe3233] rounded-lg shadow-lg hover:bg-[#f0292a] hover:cursor-pointer">
                             <h5 className="mb-2 text-xl font-bold tracking-tight">LECTURE HALL ROOM NO. 83 | 24/08/2023 | 5.00 PM TO 5.30 PM</h5>
                             <div className="flex justify-between items-end">
                                 <div className="font-normal text-black text-sm">
@@ -71,7 +75,7 @@ function StudentDashboardPendingRequests(props) {
                         </div>
                     </li>
                     <li className="p-2">
-                        <div className="block w-full p-4 bg-[#fea501] rounded-lg shadow-lg hover:bg-[#f09c02] hover:cursor-default">
+                        <button onClick={func} className="block text-left w-full p-4 bg-[#fea501] rounded-lg shadow-lg hover:bg-[#f09c02] hover:cursor-pointer">
                             <h5 className="mb-2 text-xl font-bold tracking-tight">LECTURE HALL ROOM NO. 85 | 22/08/2023 | 5.00 PM TO 6.30 PM</h5>
                             <div className="flex justify-between items-end">
                                 <div className="font-normal text-black text-sm">
@@ -86,7 +90,7 @@ function StudentDashboardPendingRequests(props) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -94,4 +98,4 @@ function StudentDashboardPendingRequests(props) {
     );
 }
 
-export default StudentDashboardPendingRequests;
+export default AdminPendingRequests;
