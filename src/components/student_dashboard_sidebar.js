@@ -88,7 +88,7 @@ function StudentDashboardSidebar(props) {
                                             type="button"
                                             onClick={() => setShowModal(false)}
                                         >
-                                            Close
+                                            No
                                         </button>
                                         <a
                                             className="bg-sky-500 text-white hover:bg-sky-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -96,7 +96,7 @@ function StudentDashboardSidebar(props) {
                                             href="/"
                                             onClick={() => setShowModal(false)}
                                         >
-                                            Save Changes
+                                            Yes
                                         </a>
                                     </div>
                                 </div>
