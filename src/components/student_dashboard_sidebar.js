@@ -42,13 +42,13 @@ function StudentDashboardSidebar(props) {
                 </a>
                 <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "hall_availability" ? styles : {}} href="/student/dashboard/hall_availability">
                     <div className="flex items-center">
-                        <img src={props.data === "hall_availability" ? hall_icon_white : hall_icon_grey} className="h-5 w-5 mr-2" alt="hall-icon"></img>
+                        <img src={props.data === "hall_availability" ? calendar_icon_white : calendar_icon_grey} className="h-5 w-5 mr-2" alt="hall-icon"></img>
                         <div className="text-grey">Hall Availability</div>
                     </div>
                 </a>
                 <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "hall_booking" ? styles : {}} href="/student/dashboard/hall_booking">
                     <div className="flex items-center">
-                        <img src={props.data === "hall_booking" ? calendar_icon_white : calendar_icon_grey} className="h-5 w-5 mr-2" alt="calendar-icon"></img>
+                        <img src={props.data === "hall_booking" ? hall_icon_white : hall_icon_grey} className="h-5 w-5 mr-2" alt="calendar-icon"></img>
                         <div className="text-grey">Hall Booking</div>
                     </div>
                 </a>
