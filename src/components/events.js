@@ -19,19 +19,16 @@ const events = [
     },
     {
         title: "Lecture Hall No. 26",
-        start: "YEAR-MONTH-17",
         start: getDate("YEAR-MONTH-26T11:00:00+05:30"),
         end: getDate("YEAR-MONTH-26T12:15:00+05:30")
     },
     {
         title: "Drawing Hall : 49",
-        start: "YEAR-MONTH-17",
         start: getDate("YEAR-MONTH-26T10:30:00+05:30"),
         end: getDate("YEAR-MONTH-26T12:15:00+05:30")
     },
     {
         title: "Lecture Hall No. 26",
-        start: "YEAR-MONTH-17",
         start: getDate("YEAR-MONTH-16T08:30:00+05:30"),
         end: getDate("YEAR-MONTH-16T10:30:00+05:30")
     }

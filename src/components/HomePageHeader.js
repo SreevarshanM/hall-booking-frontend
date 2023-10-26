@@ -23,7 +23,7 @@ function HomePageHeader() {
                         <li>
                             <a href="/register" className="hover:font-bold">REGISTER</a>
                         </li>
-                        <a>|</a>
+                        <div>|</div>
                         <li>
                             <a href="/login" className="hover:font-bold">LOGIN</a>
                         </li>
