@@ -1,7 +1,31 @@
 import Datepicker from "tailwind-datepicker-react";
-import { useState } from "react";
+import { useEffect,useState } from "react";
 
 function StudentDashboardHallBookingBookingForm() {
+
+    //AVAILABLE SLOTS
+    const [availableTimes, setAvailableTimes] = useState([]);
+    const [Time_From, setTimeFrom] = useState('');
+    const [Time_To, setTimeTo] = useState('');
+
+    useEffect(() => {
+        console.log("Fetching available time slots...");
+        fetch('http://localhost:8800/api/booking/availableslots')
+        .then((response) => response.json())
+        .then((data) => {
+            const availableTimeSlots = data.availableTimeSlots.map((timeStr) => new Date(timeStr));
+            setAvailableTimes(availableTimeSlots);
+        });
+    }, []);
+
+    const handleTimeFromChange = (event) => {
+        setTimeFrom(event.target.value);
+    };
+
+    const handleTimeToChange = (event) => {
+        setTimeTo(event.target.value);
+    };
+    //
 
 
     const options = {
@@ -125,7 +149,14 @@ function StudentDashboardHallBookingBookingForm() {
                                 </label>
                             </td>
                             <td>
-                                <input className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
+                                <select id="TimeFrom" value={Time_From} onChange={handleTimeFromChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
+                                    <option value="">Select a time</option>
+                                    {availableTimes.map((time, index) => (
+                                        <option key={index} value={time}>
+                                            { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
+                                        </option>
+                                    ))}
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -135,7 +166,14 @@ function StudentDashboardHallBookingBookingForm() {
                                 </label>
                             </td>
                             <td>
-                                <input className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
+                                <select id="TimeTo" value={Time_To} onChange={handleTimeToChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
+                                    <option value="">Select a time</option>
+                                    {availableTimes.map((time, index) => (
+                                        <option key={index} value={time}>
+                                            { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
+                                        </option>
+                                    ))}  
+                                </select>
                             </td>
                         </tr>
                         <tr>

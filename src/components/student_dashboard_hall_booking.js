@@ -2,9 +2,36 @@ import ceg from "../assests/ceg.jpeg";
 import StudentHallBookingDetailsPage from "./student_dashboard_hall_details";
 import StudentHallBookingNavbar from "./student_dashboard_navbar";
 import StudentHallBookingBookingForm from "./student_dashboard_booking_form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from 'axios'
 
 function StudentDashboardHallBookingHallList() {
+
+    //GET HALLS FROM halls SCHEMA FROM MONGO
+    const [halls, setHalls] = useState([]);
+
+    useEffect(() => {
+        
+        axios.get('http://localhost:8800/api/halls')
+        .then((response) => {
+            setHalls(response.data);
+        })
+        .catch((error) => {
+            console.error('Error fetching hall data:', error);
+        });
+    }, []);
+    //
+
+    //HANDLING DEPARTMENT CHANGE
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+    const handleDepartmentChange = (e) => {
+        setSelectedDepartment(e.target.value);
+    };
+    const filteredHalls = selectedDepartment
+        ? halls.filter((hall) => hall.Department === selectedDepartment)
+        : halls;
+    //
+
     var [show, showDetails] = useState(false);
     var [showBF, showBookingForm] = useState(false);
 
@@ -62,12 +89,10 @@ function StudentDashboardHallBookingHallList() {
                         <div className="flex justify-between flex-wrap">
                             <div className="flex items-center w-full mb-3 md:w-1/2">
                                 <div className="whitespace-nowrap text-gray-900 font-semibold">Department  : </div>
-                                <select id="Departments" className="bg-zinc-200 text-gray-500 w-full ml-3 md:mx-3 text-md rounded-lg p-1.5" defaultValue="Vivek">
-                                    <option value="Vivek">Vivek Auditorium</option>
-                                    <option value="Math">Department of Mathematics</option>
-                                    <option value="IT">Department of Information Science and Technology</option>
-                                    <option value="CSE">Department of Computer Science</option>
-                                    <option value="Mech">Department of Mechanical</option>
+                                <select id="Departments" onChange={handleDepartmentChange} value={selectedDepartment} className="bg-zinc-200 text-gray-500 w-full ml-3 md:mx-3 text-md rounded-lg p-1.5" defaultValue="Vivek">
+                                    <option value="">All Departments</option>
+                                    <option value="Mathematics">Department of Mathematics</option>
+                                    <option value="Dean's Office">Office of Dean</option>
                                 </select>
                             </div>
                             <div className=" w-full md:w-1/2">
@@ -75,148 +100,30 @@ function StudentDashboardHallBookingHallList() {
                             </div>
                         </div>
 
-                        <div className="-mx-3 flex flex-wrap">
-
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div className="-mx-3 flex flex-wrap">
+                    {filteredHalls.map((hall) => (
+                        <div key={hall._id} className="w-full md:w-1/2 lg:w-1/3 p-3">
+                        <div className="relative bg-white rounded-lg shadow-2xl">
+                            <div className="p-5 absolute z-10 w-full top-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
+                            <div>
+                                <h5 className="mb-2 text-2xl font-semibold text-white">{hall.Hall_Name}</h5>
                             </div>
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div>
+                            <img className="h-36 w-full rounded-t-lg" src={hall.Image1} alt={hall.Hall_Name} />
                             </div>
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="flex justify-center mt-3">
+                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
+                                View details
+                            </button>
+                            <button onClick={loadBookingForm} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
+                                Book hall
+                            </button>
                             </div>
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full md:w-1/2 lg:w-1/3">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full m-2.5 bg-white rounded-lg shadow-2xl">
-                                        <div className="p-5 absolute z-10 w-full top-0 bottom-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                                            <div>
-                                                <h5 className="mb-2 text-2xl font-semibold text-white">Vivekanandha Auditorium</h5>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <img className="h-36 w-full rounded-t-lg" src={ceg} alt="" />
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                                View details
-                                            </button>
-                                            <button onClick={loadBookingForm} className=" text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                                Book hall
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
+                        </div>
+                    ))}
+                    </div>
                     </div>
                 )
             }
