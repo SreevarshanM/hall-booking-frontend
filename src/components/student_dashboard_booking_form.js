@@ -1,7 +1,23 @@
 import Datepicker from "tailwind-datepicker-react";
 import { useEffect,useState } from "react";
+import axios from 'axios'
 
-function StudentDashboardHallBookingBookingForm() {
+function StudentDashboardHallBookingBookingForm({ selectedHall }) {
+    //GET HALLS FROM halls SCHEMA FROM MONGO
+    const [halls, setHalls] = useState([]);
+
+
+    useEffect(() => {
+        
+        axios.get('http://localhost:8800/api/halls')
+        .then((response) => {
+            setHalls(response.data);
+        })
+        .catch((error) => {
+            console.error('Error fetching hall data:', error);
+        });
+    }, []);
+    ///
 
     //AVAILABLE SLOTS
     const [availableTimes, setAvailableTimes] = useState([]);
@@ -10,7 +26,7 @@ function StudentDashboardHallBookingBookingForm() {
 
     useEffect(() => {
         console.log("Fetching available time slots...");
-        fetch('http://localhost:8800/api/booking/availableslots')
+        fetch('http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}')
         .then((response) => response.json())
         .then((data) => {
             const availableTimeSlots = data.availableTimeSlots.map((timeStr) => new Date(timeStr));
@@ -112,9 +128,7 @@ function StudentDashboardHallBookingBookingForm() {
                             </td>
                             <td>
                                 <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option>Lecture Hall No. 78</option>
-                                    <option>Lecture Hall No. 201</option>
-                                    <option>Vivekanandha Auditorium</option>
+                                    <option>{selectedHall.Hall_Name}</option>
                                 </select>
                             </td>
                         </tr>
@@ -125,11 +139,7 @@ function StudentDashboardHallBookingBookingForm() {
                                 </label>
                             </td>
                             <td>
-                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option>CSAU Club</option>
-                                    <option>Department of Computer Science</option>
-                                    <option>Department of Information Science and Technology</option>
-                                </select>
+                                <input className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </td>
                         </tr>
                         <tr>
