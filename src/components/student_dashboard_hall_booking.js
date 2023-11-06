@@ -3,12 +3,14 @@ import StudentHallBookingDetailsPage from "./student_dashboard_hall_details";
 import StudentHallBookingNavbar from "./student_dashboard_navbar";
 import StudentHallBookingBookingForm from "./student_dashboard_booking_form";
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 function StudentDashboardHallBookingHallList() {
 
     //GET HALLS FROM halls SCHEMA FROM MONGO
     const [halls, setHalls] = useState([]);
+
 
     useEffect(() => {
         
@@ -20,7 +22,7 @@ function StudentDashboardHallBookingHallList() {
             console.error('Error fetching hall data:', error);
         });
     }, []);
-    //
+    ///
 
     //HANDLING DEPARTMENT CHANGE
     const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -30,7 +32,11 @@ function StudentDashboardHallBookingHallList() {
     const filteredHalls = selectedDepartment
         ? halls.filter((hall) => hall.Department === selectedDepartment)
         : halls;
-    //
+    ///
+
+    //HANDLING SELECTED HALL
+    const [selectedHall, setSelectedHall] = useState('')
+    ///
 
     var [show, showDetails] = useState(false);
     var [showBF, showBookingForm] = useState(false);
@@ -46,11 +52,12 @@ function StudentDashboardHallBookingHallList() {
         listAdd(hall_list);
     }
 
-    const loadBookingForm = (event) => {
+    const loadBookingForm = (hall) => {
         showBookingForm(showBF => !showBF);
-        hall_list.push(hall_name);
+        hall_list.push(hall.Hall_Name); //
         hall_list.push("Book hall");
         listAdd(hall_list);
+        setSelectedHall(hall) ///
     }
 
     const childToParent = (childData) => {
@@ -116,7 +123,7 @@ function StudentDashboardHallBookingHallList() {
                             <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
                                 View details
                             </button>
-                            <button onClick={loadBookingForm} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
+                            <button onClick={() => loadBookingForm(hall)} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
                                 Book hall
                             </button>
                             </div>
@@ -132,7 +139,7 @@ function StudentDashboardHallBookingHallList() {
                 show && (<StudentHallBookingDetailsPage data={{ hallName: hall_name }} />)
             }
             {
-                showBF && (<StudentHallBookingBookingForm />)
+                showBF && (<StudentHallBookingBookingForm selectedHall={selectedHall}/>) //
             }
         </div >
     );
