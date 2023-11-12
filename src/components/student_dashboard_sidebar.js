@@ -8,13 +8,20 @@ import message_icon_grey from "../assests/message_icon_grey.png";
 import message_icon_white from "../assests/message_icon_white.png";
 import logout_icon_grey from "../assests/logout_icon_grey.png";
 import profile from "../assests/email_id_input.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function StudentDashboardSidebar(props) {
     const styles = {
         backgroundColor: 'rgb(14, 165, 233)',
         color: "rgb(255, 255, 255)"
     }
+    const [userData,setUserData] = useState('')
+    useEffect(() => {
+        const data  = JSON.parse(localStorage.getItem("authToken"))
+        setUserData(data)
+    }, []);
+
+    
 
     const [showModal, setShowModal] = useState(false);
 
@@ -31,7 +38,7 @@ function StudentDashboardSidebar(props) {
                         <img src={profile} className="h-10 w-10" alt="profile-icon"></img>
                     </div>
                     <div className="font-bold text-xl">
-                        SREE VARSHAN
+                        {userData.Student_Name}
                     </div>
                 </div>
                 <a className="block text-gray-500 py-2.5 px-4 my-2 rounded" style={props.data === "dashboard" ? styles : {}} href="/student/dashboard">
