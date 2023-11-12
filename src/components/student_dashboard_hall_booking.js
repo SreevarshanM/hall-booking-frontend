@@ -10,11 +10,10 @@ function StudentDashboardHallBookingHallList() {
 
     //GET HALLS FROM halls SCHEMA FROM MONGO
     const [halls, setHalls] = useState([]);
-
+    const [department, setDepartment] = useState('');
 
     useEffect(() => {
-        
-        axios.get('http://localhost:8800/api/halls')
+        axios.get('http://localhost:8800/api/halls/getAllHalls')
         .then((response) => {
             setHalls(response.data);
         })
@@ -46,10 +45,11 @@ function StudentDashboardHallBookingHallList() {
 
     var [list, listAdd] = useState(hall_list);
 
-    const loadDetailsPage = (event) => {
+    const loadDetailsPage = (hall) => {
         showDetails(show => !show);
-        hall_list.push(hall_name);
+        hall_list.push(hall.Hall_Name);
         listAdd(hall_list);
+        setSelectedHall(hall)
     }
 
     const loadBookingForm = (hall) => {
@@ -96,7 +96,7 @@ function StudentDashboardHallBookingHallList() {
                         <div className="flex justify-between flex-wrap">
                             <div className="flex items-center w-full mb-3 md:w-1/2">
                                 <div className="whitespace-nowrap text-gray-900 font-semibold">Department  : </div>
-                                <select id="Departments" onChange={handleDepartmentChange} value={selectedDepartment} className="bg-zinc-200 text-gray-500 w-full ml-3 md:mx-3 text-md rounded-lg p-1.5" defaultValue="Vivek">
+                                <select id="Departments" onChange={handleDepartmentChange} defaultValue="All Departments" className="bg-zinc-200 text-gray-500 w-full ml-3 md:mx-3 text-md rounded-lg p-1.5">
                                     <option value="">All Departments</option>
                                     <option value="Mathematics">Department of Mathematics</option>
                                     <option value="Dean's Office">Office of Dean</option>
@@ -120,7 +120,7 @@ function StudentDashboardHallBookingHallList() {
                             <img className="h-36 w-full rounded-t-lg" src={hall.Image1} alt={hall.Hall_Name} />
                             </div>
                             <div className="flex justify-center mt-3">
-                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
+                            <button onClick={() => loadDetailsPage(hall)} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
                                 View details
                             </button>
                             <button onClick={() => loadBookingForm(hall)} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
@@ -136,7 +136,7 @@ function StudentDashboardHallBookingHallList() {
             }
 
             {
-                show && (<StudentHallBookingDetailsPage data={{ hallName: hall_name }} />)
+                show && (<StudentHallBookingDetailsPage selectedHall={selectedHall} />)
             }
             {
                 showBF && (<StudentHallBookingBookingForm selectedHall={selectedHall}/>) //
