@@ -1,11 +1,29 @@
-import Datepicker from "tailwind-datepicker-react";
+// import Datepicker from "tailwind-datepicker-react";
 import { useEffect,useState } from "react";
 import axios from 'axios'
 
 function StudentDashboardHallBookingBookingForm({ selectedHall }) {
+
     //GET HALLS FROM halls SCHEMA FROM MONGO
     const [halls, setHalls] = useState([]);
+    const [affiliatedDept, setAffiliatedDept] = useState();
+    const [Time_From, setTimeFrom] = useState('');
+    const [Time_To, setTimeTo] = useState('');
+    const [selectedDate,setSelectedDate] = useState('');
+    const [reason, setReason] = useState();
 
+    //
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    
+
+    //STUDENT ODA DEPARTMENT
+    const [userData,setUserData] = useState('')
+    useEffect(() => {
+        const data  = JSON.parse(localStorage.getItem("authToken"))
+        setUserData(data)
+    }, []);
+    //
 
     useEffect(() => {
         
@@ -17,93 +35,105 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
             console.error('Error fetching hall data:', error);
         });
     }, []);
-    ///
+    ///Handle Booking
+    const handleBooking = async (event)=>{
+        event.preventDefault();
+
+        try {
+            const data = {
+                Student_ID:userData.Student_ID,
+                Hall_Name: selectedHall.Hall_Name,           
+                Department : userData.Department,
+                Affiliated:affiliatedDept,
+                Date : selectedDate,
+                Time_From: Time_From,
+                Time_To: Time_To,
+                Reason:reason
+            }
+            const response = await axios.post('http://localhost:8800/api/booking/createBooking', data);
+            if (response.status === 200) {
+                console.log('Booking created successfully');
+                setShowSuccessMessage(true); //SUCCESS MESSAGE
+                setShowErrorMessage(false);
+
+                event.target.reset();
+
+                setTimeout(() => {
+                    setShowSuccessMessage(false);
+                  }, 3000);
+                
+                
+
+            } else {
+                console.error('Failed to create booking');
+                setShowErrorMessage(true); //ERROR MESSAGE
+                setShowSuccessMessage(false);
+            }
+            
+        } catch (error) {
+            console.error('Error creating booking:', error.message);
+            setShowErrorMessage(true);
+            setShowSuccessMessage(false);
+        }
+    }
+    //
+  
 
     //AVAILABLE SLOTS
     const [availableTimes, setAvailableTimes] = useState([]);
-    const [Time_From, setTimeFrom] = useState('');
-    const [Time_To, setTimeTo] = useState('');
+    
 
     useEffect(() => {
-        console.log("Fetching available time slots...");
-        fetch('http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}')
-        .then((response) => response.json())
-        .then((data) => {
-            const availableTimeSlots = data.availableTimeSlots.map((timeStr) => new Date(timeStr));
-            setAvailableTimes(availableTimeSlots);
-        });
-    }, []);
+        if (selectedDate){
+            console.log("Fetching available time slots...");
+            fetch(`http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}&date=${selectedDate}`) 
+            .then((response) => response.json())
+            .then((data) => {
+                const availableTimeSlots = data.availableTimeSlots.map((timeStr) => new Date(timeStr));
+                setAvailableTimes(availableTimeSlots);
+            });
+    }}, [selectedDate]);
+
+    useEffect(() => {
+        // Set the initial value to the first element of availableTimes
+        if (availableTimes.length > 0) {
+          setTimeFrom(availableTimes[0]);
+          setTimeTo(availableTimes[0]);
+        }
+      }, [availableTimes])
 
     const handleTimeFromChange = (event) => {
         setTimeFrom(event.target.value);
     };
 
+
     const handleTimeToChange = (event) => {
         setTimeTo(event.target.value);
     };
     //
-
-
-    const options = {
-        title: "Demo Title",
-        autoHide: true,
-        todayBtn: false,
-        clearBtn: true,
-        clearBtnText: "Clear",
-        maxDate: new Date("2030-01-01"),
-        minDate: new Date("1950-01-01"),
-        theme: {
-            background: "bg-gray-700 dark:bg-gray-800",
-            todayBtn: "",
-            clearBtn: "",
-            icons: "",
-            text: "",
-            disabledText: "bg-red-500",
-            input: "",
-            inputIcon: "",
-            selected: "",
-        },
-        icons: {
-            // () => ReactElement | JSX.Element
-            prev: () => <span>Previous</span>,
-            next: () => <span>Next</span>,
-        },
-        datepickerclassNames: "top-12",
-        defaultDate: new Date("2022-01-01"),
-        language: "en",
-        disabledDates: [],
-        weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-        inputNameProp: "date",
-        inputIdProp: "date",
-        inputPlaceholderProp: "Select Date",
-        inputDateFormatProp: {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        }
+    const handleDateChange = (e) => {
+        const selectedDate = e.target.value;
+        setSelectedDate(selectedDate);
     }
+    // 
 
-    const DemoComponent = () => {
-        const [show, setShow] = useState(false);
-        const handleChange = (selectedDate) => {
-            console.log(selectedDate)
-        }
-        const handleClose = (state) => {
-            setShow(state)
-        }
-
-        return (
-            <div>
-                <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose} />
-            </div>
-        )
-    }
 
     return (
         <div className="sm:p-14 p-3 bg-zinc-100">
             <div className="text-sm sm:text-lg">Fill the following details and click submit to book the hall</div>
+            {showSuccessMessage && (
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                <span class="font-medium">Booking created successfully!</span> 
+            </div>
+            )}
 
-            <form className="py-10 sm:pr-20">
+            {showErrorMessage && (
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                <span class="font-medium">Failed to create Booking!</span> Try again later.
+            </div>
+            )}
+
+            <form className="py-10 sm:pr-20" onSubmit={handleBooking}>
                 <table className="table-auto w-full">
                     <tbody>
                         <tr>
@@ -113,11 +143,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                                 </label>
                             </td>
                             <td>
-                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option>Department of Mathematics</option>
-                                    <option>Department of Computer Science</option>
-                                    <option>Department of Information Science and Technology</option>
-                                </select>
+                                <input type="text" value={userData.Department} readOnly className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </td>
                         </tr>
                         <tr>
@@ -127,9 +153,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                                 </label>
                             </td>
                             <td>
-                                <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option>{selectedHall.Hall_Name}</option>
-                                </select>
+                                <input type="text" value={selectedHall.Hall_Name} readOnly className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </td>
                         </tr>
                         <tr>
@@ -139,7 +163,9 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                                 </label>
                             </td>
                             <td>
-                                <input className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
+                                <input onChange={(e) => {
+                      setAffiliatedDept(e.target.value);
+                    }} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </td>
                         </tr>
                         <tr>
@@ -149,7 +175,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                                 </label>
                             </td>
                             <td>
-                                <DemoComponent />
+                                <input type="date" onChange={handleDateChange}/>
                             </td>
                         </tr>
                         <tr>
@@ -160,7 +186,9 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                             </td>
                             <td>
                                 <select id="TimeFrom" value={Time_From} onChange={handleTimeFromChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option value="">Select a time</option>
+                                    <option disabled value="">
+                                        Select a date
+                                    </option>
                                     {availableTimes.map((time, index) => (
                                         <option key={index} value={time}>
                                             { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
@@ -177,7 +205,9 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                             </td>
                             <td>
                                 <select id="TimeTo" value={Time_To} onChange={handleTimeToChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option value="">Select a time</option>
+                                    <option disabled value="">
+                                        Select a date
+                                    </option>
                                     {availableTimes.map((time, index) => (
                                         <option key={index} value={time}>
                                             { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
@@ -193,14 +223,18 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                                 </label>
                             </td>
                             <td className="pt-4">
-                                <input className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
+                                <input onChange={(e) => {
+                      setReason(e.target.value);
+                    }} className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
 
-                <button type="submit" className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center">Book Hall</button>
+                <button type="submit" className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                    Book Hall
+                </button>
             </form>
 
         </div>
@@ -208,3 +242,51 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
 }
 
 export default StudentDashboardHallBookingBookingForm;
+
+
+
+
+// const bookingSchema = new mongoose.Schema({
+//    "Faculty_ID": {
+//         "type": "String",
+//         "required":true
+//     },
+//     "Hall_ID": {
+//         "type": "String",
+//         "required":true
+//     },
+//     "Student_ID": {
+//         "type": "String",
+//         "required":true
+//     },
+//     "Department": {
+//         "type": "String",
+//         "required":true
+//     },
+//     "Affiliated": {
+//         "type": "String",
+//         "required":true
+//     },
+//     "Status": {
+//         "type": "String",
+//         "enum": ['rejected','approved','pending'],
+//         "default":'pending'
+//     },
+//     "Date": {
+//         "type": "Date",
+//         "required":true
+//     },
+//     "Time_From": {
+//         "type": "Date",
+//         "required":false
+//     },
+//     "Time_To": {
+//         "type": "Date",
+//         "required":false
+//     },
+//     "Reason": {
+//         "type": "String",
+//         "required":true
+//     }
+// })
+
