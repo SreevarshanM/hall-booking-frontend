@@ -11,8 +11,6 @@ function LoginCenterContent() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-
-
     const data = {
       Email,
       Password,
@@ -25,7 +23,8 @@ function LoginCenterContent() {
       },
       body: JSON.stringify(data),
     });
-    if (userData) {
+    if (userData.status === 401) console.log("Invalid Credentials");
+    if (userData.status === 200) {
       const token = await userData.json();
 
       localStorage.setItem("authToken", JSON.stringify(token));
@@ -44,7 +43,6 @@ function LoginCenterContent() {
             </h1>
 
             <form className="space-y-4 md:space-y-6">
-
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Email ID

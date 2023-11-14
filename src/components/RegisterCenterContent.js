@@ -18,7 +18,6 @@ function RegisterCenterContent() {
         Student_ID: parseFloat(Student_ID),
         Student_Name,
         Department,
-
         Password,
         Email,
       };
@@ -35,7 +34,6 @@ function RegisterCenterContent() {
         const token = await userData.json();
         localStorage.setItem("authToken", JSON.stringify(token));
         console.log("token stored...");
-
         navigate("../student/dashboard");
       }
     }

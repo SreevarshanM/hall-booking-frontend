@@ -94,7 +94,9 @@ function AdminDashboardSidebar(props) {
 
       <button
         className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+        }}
       >
         <div className="flex items-center">
           <img
@@ -117,7 +119,7 @@ function AdminDashboardSidebar(props) {
                     Do you really want to logout ?
                   </p>
                 </div>
-                {/*footer*/}
+
                 <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b">
                   <button
                     className="text-red-500 hover:bg-red-100 rounded font-semibold px-4 py-2 text-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -126,14 +128,17 @@ function AdminDashboardSidebar(props) {
                   >
                     No
                   </button>
-                  <a
+                  <button
                     className="bg-sky-500 text-white hover:bg-sky-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    href="/"
-                    onClick={() => setShowModal(false)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowModal(false);
+                      console.log(1);
+                      localStorage.removeItem("authToken");
+                    }}
                   >
                     Yes
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
