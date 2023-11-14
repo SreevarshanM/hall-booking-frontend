@@ -9,6 +9,7 @@ import message_icon_white from "../assests/message_icon_white.png";
 import logout_icon_grey from "../assests/logout_icon_grey.png";
 import profile from "../assests/email_id_input.png";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function StudentDashboardSidebar(props) {
   const styles = {
@@ -16,6 +17,7 @@ function StudentDashboardSidebar(props) {
     color: "rgb(255, 255, 255)",
   };
   const [userData, setUserData] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("authToken"));
     setUserData(data);
@@ -156,8 +158,9 @@ function StudentDashboardSidebar(props) {
                     onClick={(e) => {
                       e.preventDefault();
                       setShowModal(false);
-                      console.log(1);
                       localStorage.removeItem("authToken");
+                      props.changeRefreshState();
+                      navigate("/");
                     }}
                   >
                     Yes
