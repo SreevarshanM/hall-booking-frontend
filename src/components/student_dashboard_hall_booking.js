@@ -11,14 +11,14 @@ function StudentDashboardHallBookingHallList() {
     const [halls, setHalls] = useState([]);
 
     useEffect(() => {
-        
+
         axios.get('http://localhost:8800/api/halls')
-        .then((response) => {
-            setHalls(response.data);
-        })
-        .catch((error) => {
-            console.error('Error fetching hall data:', error);
-        });
+            .then((response) => {
+                setHalls(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching hall data:', error);
+            });
     }, []);
     //
 
@@ -35,12 +35,13 @@ function StudentDashboardHallBookingHallList() {
     var [show, showDetails] = useState(false);
     var [showBF, showBookingForm] = useState(false);
 
-    var hall_name = "Vivekanandha Auditorium";
+    var hall_name = "vieve";
     var hall_list = ["Hall Booking"];
 
     var [list, listAdd] = useState(hall_list);
 
-    const loadDetailsPage = (event) => {
+    const loadDetailsPage = (event, hall) => {
+        hall_name = hall;
         showDetails(show => !show);
         hall_list.push(hall_name);
         listAdd(hall_list);
@@ -100,30 +101,30 @@ function StudentDashboardHallBookingHallList() {
                             </div>
                         </div>
 
-                    <div className="-mx-3 flex flex-wrap">
-                    {filteredHalls.map((hall) => (
-                        <div key={hall._id} className="w-full md:w-1/2 lg:w-1/3 p-3">
-                        <div className="relative bg-white rounded-lg shadow-2xl">
-                            <div className="p-5 absolute z-10 w-full top-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
-                            <div>
-                                <h5 className="mb-2 text-2xl font-semibold text-white">{hall.Hall_Name}</h5>
-                            </div>
-                            </div>
-                            <div>
-                            <img className="h-36 w-full rounded-t-lg" src={hall.Image1} alt={hall.Hall_Name} />
-                            </div>
-                            <div className="flex justify-center mt-3">
-                            <button onClick={loadDetailsPage} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
-                                View details
-                            </button>
-                            <button onClick={loadBookingForm} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
-                                Book hall
-                            </button>
-                            </div>
+                        <div className="-mx-3 flex flex-wrap">
+                            {filteredHalls.map((hall) => (
+                                <div key={hall._id} className="w-full md:w-1/2 lg:w-1/3 p-3">
+                                    <div className="relative bg-white rounded-lg shadow-2xl">
+                                        <div className="p-5 absolute z-10 w-full top-0 bg-gray-950/75 h-36 flex justify-center items-center rounded-t-lg text-center">
+                                            <div>
+                                                <h5 className="mb-2 text-2xl font-semibold text-white">{hall.Hall_Name}</h5>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <img className="h-36 w-full rounded-t-lg" src={hall.Image1} alt={hall.Hall_Name} />
+                                        </div>
+                                        <div className="flex justify-center mt-3">
+                                            <button onClick={loadDetailsPage(hall)} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-black bg-zinc-300 rounded-bl-lg hover:bg-zinc-400">
+                                                View details
+                                            </button>
+                                            <button onClick={loadBookingForm} className="text-center w-1/2 px-3 py-2 h-10 text-sm font-medium text-white bg-sky-500 rounded-br-lg hover:bg-sky-600">
+                                                Book hall
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        </div>
-                    ))}
-                    </div>
                     </div>
                 )
             }

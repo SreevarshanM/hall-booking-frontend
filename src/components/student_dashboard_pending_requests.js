@@ -1,7 +1,7 @@
 function StudentDashboardPendingRequests(props) {
     return (
-       <div className="bg-neutral-100 w-full">
-             <nav className="bg-white border-gray-200">
+        <div className="bg-neutral-100 w-full">
+            <nav className="bg-white border-gray-200">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <div className="flex items-center flex-wrap">
                         <span className="self-center mr-4 text-md md:text-2xl font-bold whitespace-nowrap">REQUESTS : </span>
@@ -24,9 +24,9 @@ function StudentDashboardPendingRequests(props) {
                     <div className="mt-2 lg:mt-0 w-full md:block md:w-auto" id="navbar-default">
                         <select id="email" className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
                             <option>All</option>
-                            <option>Department of Mathematics</option>
-                            <option>Department of Computer Science</option>
-                            <option>Department of Information Science and Technology</option>
+                            <option>Approved</option>
+                            <option>Pending</option>
+                            <option>Rejected</option>
                         </select>
                     </div>
                 </div>
