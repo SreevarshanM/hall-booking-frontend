@@ -7,13 +7,17 @@ function LoginCenterContent() {
   const navigate = useNavigate();
   const [Email, setEmail] = useState();
   const [Password, setPassword] = useState();
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
+
+
     const data = {
       Email,
       Password,
     };
-    console.log("fetching api...");
+
     const userData = await fetch("http://localhost:8800/api/auth/login", {
       method: "POST",
       headers: {
@@ -23,8 +27,10 @@ function LoginCenterContent() {
     });
     if (userData) {
       const token = await userData.json();
+
       localStorage.setItem("authToken", JSON.stringify(token));
       console.log("token generated...");
+
       navigate("../student/dashboard");
     }
   };
@@ -36,7 +42,9 @@ function LoginCenterContent() {
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Login
             </h1>
+
             <form className="space-y-4 md:space-y-6">
+
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Email ID

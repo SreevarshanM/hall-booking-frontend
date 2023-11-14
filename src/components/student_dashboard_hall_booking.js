@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function StudentDashboardHallBookingHallList() {
+
   //GET HALLS FROM halls SCHEMA FROM MONGO
   const navigate = useNavigate();
   const [halls, setHalls] = useState([]);
@@ -67,12 +68,14 @@ function StudentDashboardHallBookingHallList() {
       if (childData[1] === "Hall Booking") {
         showBookingForm(false);
         showDetails(false);
+
         childData[0].pop();
       } else {
         showBookingForm(false);
         showDetails(true);
       }
     }
+
 
     childData[0].pop();
     listAdd(childData[0]);
@@ -167,6 +170,7 @@ function StudentDashboardHallBookingHallList() {
       }
     </div>
   );
+
 }
 
 export default StudentDashboardHallBookingHallList;
