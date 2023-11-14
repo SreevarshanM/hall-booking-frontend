@@ -21,7 +21,7 @@ function RegisterCenterContent() {
         Password,
         Email,
       };
-      console.log("fetching api...")
+      console.log("fetching api...");
       const userData = await fetch("http://localhost:8800/api/auth/register", {
         method: "POST",
         headers: {
@@ -29,13 +29,14 @@ function RegisterCenterContent() {
         },
         body: JSON.stringify(data),
       });
-      if (userData) {
+
+      if (userData.status === 201) {
         const token = await userData.json();
-        localStorage.setItem("authToken", JSON.stringify(token.token));
-        console.log("token stored...")
+        localStorage.setItem("authToken", JSON.stringify(token));
+        console.log("token stored...");
         navigate("../student/dashboard");
       }
-    } 
+    }
   };
   return (
     <div>
@@ -88,6 +89,7 @@ function RegisterCenterContent() {
                     setDepartment(e.target.value);
                   }}
                 >
+                  <option>Select your department</option>
                   <option>Department of Mathematics</option>
                   <option>Department of Computer Science</option>
                   <option>
