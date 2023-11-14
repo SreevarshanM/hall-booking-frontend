@@ -22,11 +22,6 @@ function RegisterCenterContent() {
         Password,
         Email,
       };
-      console.log("fetching api...");
-
-        Email,
-        Password,
-      };
 
       const userData = await fetch("http://localhost:8800/api/auth/register", {
         method: "POST",
@@ -35,7 +30,6 @@ function RegisterCenterContent() {
         },
         body: JSON.stringify(data),
       });
-
 
       if (userData.status === 201) {
         const token = await userData.json();
@@ -59,7 +53,6 @@ function RegisterCenterContent() {
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Register Number
-
                 </label>
                 <input
                   onChange={(e) => {
@@ -99,7 +92,6 @@ function RegisterCenterContent() {
                     setDepartment(e.target.value);
                   }}
                 >
-
                   <option>Select your department</option>
 
                   <option>Department of Mathematics</option>
@@ -131,7 +123,6 @@ function RegisterCenterContent() {
                     placeholder="student@fmail.com"
                     required
                   />
-
                 </div>
               </div>
               <div>
@@ -196,9 +187,7 @@ function RegisterCenterContent() {
               </div>
               <button
                 type="submit"
-
                 onClick={handleRegister}
-
                 className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
               >
                 Register
