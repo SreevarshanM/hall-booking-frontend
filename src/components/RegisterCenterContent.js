@@ -18,9 +18,16 @@ function RegisterCenterContent() {
         Student_ID: parseFloat(Student_ID),
         Student_Name,
         Department,
+
+        Password,
+        Email,
+      };
+      console.log("fetching api...");
+
         Email,
         Password,
       };
+
       const userData = await fetch("http://localhost:8800/api/auth/register", {
         method: "POST",
         headers: {
@@ -28,9 +35,13 @@ function RegisterCenterContent() {
         },
         body: JSON.stringify(data),
       });
-      if (userData) {
+
+
+      if (userData.status === 201) {
         const token = await userData.json();
-        localStorage.setItem("authToken", JSON.stringify(token.token));
+        localStorage.setItem("authToken", JSON.stringify(token));
+        console.log("token stored...");
+
         navigate("../student/dashboard");
       }
     }
@@ -43,10 +54,12 @@ function RegisterCenterContent() {
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Register
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+
+            <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Student Id
+                  Register Number
+
                 </label>
                 <input
                   onChange={(e) => {
@@ -86,6 +99,9 @@ function RegisterCenterContent() {
                     setDepartment(e.target.value);
                   }}
                 >
+
+                  <option>Select your department</option>
+
                   <option>Department of Mathematics</option>
                   <option>Department of Computer Science</option>
                   <option>
@@ -115,6 +131,7 @@ function RegisterCenterContent() {
                     placeholder="student@fmail.com"
                     required
                   />
+
                 </div>
               </div>
               <div>
@@ -165,6 +182,7 @@ function RegisterCenterContent() {
                   />
                 </div>
               </div>
+
               <div className="flex items-center justify-center">
                 <p className="text-sm font-light text-gray-500">
                   Already have an account?{" "}
@@ -178,7 +196,9 @@ function RegisterCenterContent() {
               </div>
               <button
                 type="submit"
+
                 onClick={handleRegister}
+
                 className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
               >
                 Register

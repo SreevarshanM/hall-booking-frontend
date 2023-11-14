@@ -4,7 +4,9 @@ import HomePageHeader from "./HomePageHeader";
 
 function Header(props) {
   var backgroundStyle = {
-    backgroundImage: `url${ceg}`,
+
+    backgroundImage: "url(" + ceg + ")",
+
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -12,7 +14,9 @@ function Header(props) {
 
   return (
     <header style={backgroundStyle} className="shadow-stone-400 shadow-lg">
-      <nav nav className="bg-black/75 py-5 dark:bg-gray-800 px-3 sm:px-10">
+
+      <nav className="bg-black/75 py-5 dark:bg-gray-800 px-3 sm:px-10">
+
         <div className="flex flex-wrap justify-between items-center">
           <div className="flex items-center">
             <img src={CEG_main_logo} className="mr-3 h-20 sm:h-24" />
