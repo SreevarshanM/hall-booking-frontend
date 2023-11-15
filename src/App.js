@@ -37,7 +37,7 @@ function App() {
   }, [refresh]);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header data={{ flag: isHeader() }} />
       <BrowserRouter>
         <Routes>
