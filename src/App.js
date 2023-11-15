@@ -14,6 +14,7 @@ import AdminDashboardPendingRequests from "./views/AdminDashboardPendingRequests
 import AdminDashboardHallAvailability from "./views/AdminDashboardHallAvailability";
 import CalendarCom from "./components/calendar";
 import HallDetailMain from "./components/student_dashboard_hall_booking";
+import Admin_Login from "./components/Admin_Login";
 
 function App() {
   const [refresh, setRefresh] = useState();
@@ -25,7 +26,8 @@ function App() {
     if (
       pathname === "/" ||
       pathname === "/calendar" ||
-      pathname.startsWith("/hall_details")
+      pathname.startsWith("/hall_details") ||
+      pathname.startsWith("/admin_login")
     ) {
       return true;
     }
@@ -40,6 +42,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="" element={<HomePageCenterContent />} />
+          <Route path="/admin_login" element={<Admin_Login />} />
           <Route path="login" element={<LoginCenterContent />} />
           <Route path="register" element={<RegisterCenterContent />} />
           <Route

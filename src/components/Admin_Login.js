@@ -1,37 +1,14 @@
-import email_id_input from "../assests/email_id_input.png";
+import email_id_input from "../assests/admin_profile_icon.png";
 import password_input from "../assests/password_input.png";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function LoginCenterContent() {
-  const navigate = useNavigate();
-  const [Email, setEmail] = useState();
-  const [Password, setPassword] = useState();
-  const handleLogin = async () => {
-    const data = {
-      Email,
-      Password,
-    };
-    const userData = await fetch("http://localhost:8800/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    if (userData) {
-      const token = await userData.json();
-      localStorage.setItem("authToken", JSON.stringify(token.token));
-      navigate("../student/dashboard");
-    }
-  };
+function Admin_Login() {
   return (
     <div>
       <div className="flex flex-col items-center justify-center px-6 my-20">
         <div className="w-full bg-white rounded-lg shadow-xl dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Login
+              Admin Login
             </h1>
             <form className="space-y-4 md:space-y-6" action="#">
               <div>
@@ -47,13 +24,10 @@ function LoginCenterContent() {
                     ></img>
                   </div>
                   <input
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
                     type="email"
                     name="email"
                     className="bg-neutral-100 text-blue sm:text-sm rounded-sm block w-full h-10 p-2.5"
-                    placeholder="student@fmail.com"
+                    placeholder="admin@fmail.com"
                     required
                   />
                 </div>
@@ -73,30 +47,14 @@ function LoginCenterContent() {
                   <input
                     type="password"
                     name="password"
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
                     className="bg-neutral-100 rounded-sm block w-full h-10 p-2.5"
                     placeholder="••••••••"
                     required
                   />
                 </div>
               </div>
-              <div className="flex items-center justify-center">
-                <p className="text-sm font-light text-gray-500">
-                  Don’t have an account yet?{" "}
-                  <a
-                    href="/register"
-                    className="font-medium text-sky-500 hover:underline"
-                  >
-                    Register
-                  </a>
-                </p>
-              </div>
-              <button
-                onClick={handleLogin}
-                className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
-              >
+
+              <button className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center">
                 Login
               </button>
             </form>
@@ -107,4 +65,4 @@ function LoginCenterContent() {
   );
 }
 
-export default LoginCenterContent;
+export default Admin_Login;
