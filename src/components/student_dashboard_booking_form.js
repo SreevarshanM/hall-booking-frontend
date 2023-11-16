@@ -1,291 +1,302 @@
 // import Datepicker from "tailwind-datepicker-react";
-import { useEffect,useState } from "react";
-import axios from 'axios'
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function StudentDashboardHallBookingBookingForm({ selectedHall }) {
+  //GET HALLS FROM halls SCHEMA FROM MONGO
+  const [halls, setHalls] = useState([]);
+  const [affiliatedDept, setAffiliatedDept] = useState();
+  const [Time_From, setTimeFrom] = useState("");
+  const [Time_To, setTimeTo] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [reason, setReason] = useState();
 
-    //GET HALLS FROM halls SCHEMA FROM MONGO
-    const [halls, setHalls] = useState([]);
-    const [affiliatedDept, setAffiliatedDept] = useState();
-    const [Time_From, setTimeFrom] = useState('');
-    const [Time_To, setTimeTo] = useState('');
-    const [selectedDate,setSelectedDate] = useState('');
-    const [reason, setReason] = useState();
+  //
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    //
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
-    
+  //STUDENT ODA DEPARTMENT
+  const [userData, setUserData] = useState("");
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("authToken"));
+    setUserData(data);
+  }, []);
+  //
 
-    //STUDENT ODA DEPARTMENT
-    const [userData,setUserData] = useState('')
-    useEffect(() => {
-        const data  = JSON.parse(localStorage.getItem("authToken"))
-        setUserData(data)
-    }, []);
-    //
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/api/halls")
+      .then((response) => {
+        setHalls(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching hall data:", error);
+      });
+  }, []);
+  ///Handle Booking
+  const handleBooking = async (event) => {
+    event.preventDefault();
 
-    useEffect(() => {
-        axios.get('http://localhost:8800/api/halls')
-        .then((response) => {
-            setHalls(response.data);
-        })
-        .catch((error) => {
-            console.error('Error fetching hall data:', error);
+    try {
+      const data = {
+        Student_ID: userData.Student_ID,
+        Hall_Name: selectedHall.Hall_Name,
+        Department: userData.Department,
+        Affiliated: affiliatedDept,
+        Date: selectedDate,
+        Time_From: Time_From,
+        Time_To: Time_To,
+        Reason: reason,
+      };
+
+      const hallBooked = await fetch(
+        " http://localhost:8800/api/booking/createBooking",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (hallBooked.status === 200) {
+        console.log("Booking created successfully");
+        setShowSuccessMessage(true); //SUCCESS MESSAGE
+        setShowErrorMessage(false);
+
+        event.target.reset();
+
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 3000);
+      } else {
+        console.error("Failed to create booking");
+        setShowErrorMessage(true); //ERROR MESSAGE
+        setShowSuccessMessage(false);
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error.message);
+      setShowErrorMessage(true);
+      setShowSuccessMessage(false);
+    }
+  };
+  //
+
+  //AVAILABLE SLOTS
+  const [availableTimes, setAvailableTimes] = useState([]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      console.log("Fetching available time slots...");
+      fetch(
+        `http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}&date=${selectedDate}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const availableTimeSlots = data.availableTimeSlots.map(
+            (timeStr) => new Date(timeStr)
+          );
+          setAvailableTimes(availableTimeSlots);
         });
-    }, []);
-    ///Handle Booking
-    const handleBooking = async (event)=>{
-        event.preventDefault();
-
-        try {
-            const data = {
-                Student_ID:userData.Student_ID,
-                Hall_Name: selectedHall.Hall_Name,           
-                Department : userData.Department,
-                Affiliated:affiliatedDept,
-                Date : selectedDate,
-                Time_From: Time_From,
-                Time_To: Time_To,
-                Reason:reason
-            }
-            const response = await axios.post('http://localhost:8800/api/booking/createBooking', data);
-            if (response.status === 200) {
-                console.log('Booking created successfully');
-                setShowSuccessMessage(true); //SUCCESS MESSAGE
-                setShowErrorMessage(false);
-
-                event.target.reset();
-
-                setTimeout(() => {
-                    setShowSuccessMessage(false);
-                  }, 3000);
-                
-                
-
-            } else {
-                console.error('Failed to create booking');
-                setShowErrorMessage(true); //ERROR MESSAGE
-                setShowSuccessMessage(false);
-            }
-            
-        } catch (error) {
-            console.error('Error creating booking:', error.message);
-            setShowErrorMessage(true);
-            setShowSuccessMessage(false);
-        }
     }
-    //
-  
+  }, [selectedDate]);
 
-    //AVAILABLE SLOTS
-    const [availableTimes, setAvailableTimes] = useState([]);
-    
-
-    useEffect(() => {
-        if (selectedDate){
-            console.log("Fetching available time slots...");
-            fetch(`http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}&date=${selectedDate}`) 
-            .then((response) => response.json())
-            .then((data) => {
-                const availableTimeSlots = data.availableTimeSlots.map((timeStr) => new Date(timeStr));
-                setAvailableTimes(availableTimeSlots);
-            });
-    }}, [selectedDate]);
-
-    useEffect(() => {
-        // Set the initial value to the first element of availableTimes
-        if (availableTimes.length > 0) {
-          setTimeFrom(availableTimes[0]);
-          setTimeTo(availableTimes[0]);
-        }
-      }, [availableTimes])
-
-    const handleTimeFromChange = (event) => {
-        setTimeFrom(event.target.value);
-    };
-
-
-    const handleTimeToChange = (event) => {
-        setTimeTo(event.target.value);
-    };
-    //
-    const handleDateChange = (e) => {
-        const selectedDate = e.target.value;
-        setSelectedDate(selectedDate);
+  useEffect(() => {
+    // Set the initial value to the first element of availableTimes
+    if (availableTimes.length > 0) {
+      setTimeFrom(availableTimes[0]);
+      setTimeTo(availableTimes[0]);
     }
-    // 
+  }, [availableTimes]);
 
+  const handleTimeFromChange = (event) => {
+    setTimeFrom(event.target.value);
+  };
 
-    return (
-        <div className="sm:p-14 p-3 bg-zinc-100">
-            <div className="text-sm sm:text-lg">Fill the following details and click submit to book the hall</div>
-            {showSuccessMessage && (
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                <span class="font-medium">Booking created successfully!</span> 
-            </div>
-            )}
+  const handleTimeToChange = (event) => {
+    setTimeTo(event.target.value);
+  };
+  //
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    setSelectedDate(selectedDate);
+  };
+  //
 
-            {showErrorMessage && (
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                <span class="font-medium">Failed to create Booking!</span> Try again later.
-            </div>
-            )}
-
-            <form className="py-10 sm:pr-20" onSubmit={handleBooking}>
-                <table className="table-auto w-full">
-                    <tbody>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DEPARTMENT
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <input type="text" value={userData.Department} readOnly className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">HALL FOR BOOKING
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <input type="text" value={selectedHall.Hall_Name} readOnly className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">AFFILIATED DEPARTMENT/ CLUB
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <input onChange={(e) => {
-                      setAffiliatedDept(e.target.value);
-                    }} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">DATE
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <input type="date" onChange={handleDateChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME FROM
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <select id="TimeFrom" value={Time_From} onChange={handleTimeFromChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option disabled value="">
-                                        Select a date
-                                    </option>
-                                    {availableTimes.map((time, index) => (
-                                        <option key={index} value={time}>
-                                            { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
-                                        </option>
-                                    ))}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">TIME TO
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td>
-                                <select id="TimeTo" value={Time_To} onChange={handleTimeToChange} className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" required>
-                                    <option disabled value="">
-                                        Select a date
-                                    </option>
-                                    {availableTimes.map((time, index) => (
-                                        <option key={index} value={time}>
-                                            { time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit'}) }
-                                        </option>
-                                    ))}  
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="w-1/6 sm:w-1/3 p-4 align-top">
-                                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">REASON
-                                    <label className="mx-3 font-bold">:</label>
-                                </label>
-                            </td>
-                            <td className="pt-4">
-                                <input onChange={(e) => {
-                      setReason(e.target.value);
-                    }} className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-                <button type="submit" className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center">
-                    Book Hall
-                </button>
-            </form>
-
+  return (
+    <div className="sm:p-14 p-3 bg-zinc-100">
+      <div className="text-sm sm:text-lg">
+        Fill the following details and click submit to book the hall
+      </div>
+      {showSuccessMessage && (
+        <div
+          class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <span class="font-medium">Booking created successfully!</span>
         </div>
-    );
+      )}
+
+      {showErrorMessage && (
+        <div
+          class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Failed to create Booking!</span> Try again
+          later.
+        </div>
+      )}
+
+      <form className="py-10 sm:pr-20" onSubmit={handleBooking}>
+        <table className="table-auto w-full">
+          <tbody>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  DEPARTMENT
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={userData.Department}
+                  readOnly
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  HALL FOR BOOKING
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={selectedHall.Hall_Name}
+                  readOnly
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  AFFILIATED DEPARTMENT/ CLUB
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <input
+                  onChange={(e) => {
+                    setAffiliatedDept(e.target.value);
+                  }}
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  DATE
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <input type="date" onChange={handleDateChange} />
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  TIME FROM
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <select
+                  id="TimeFrom"
+                  value={Time_From}
+                  onChange={handleTimeFromChange}
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  required
+                >
+                  <option disabled value="">
+                    Select a date
+                  </option>
+                  {availableTimes.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time.toLocaleTimeString(undefined, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  TIME TO
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td>
+                <select
+                  id="TimeTo"
+                  value={Time_To}
+                  onChange={handleTimeToChange}
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  required
+                >
+                  <option disabled value="">
+                    Select a date
+                  </option>
+                  {availableTimes.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time.toLocaleTimeString(undefined, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td className="w-1/6 sm:w-1/3 p-4 align-top">
+                <label className="text-sm sm:text-lg font-bold text-gray-900 flex justify-between">
+                  REASON
+                  <label className="mx-3 font-bold">:</label>
+                </label>
+              </td>
+              <td className="pt-4">
+                <input
+                  onChange={(e) => {
+                    setReason(e.target.value);
+                  }}
+                  className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button
+          type="submit"
+          className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+        >
+          Book Hall
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default StudentDashboardHallBookingBookingForm;
-
-
-
-
-// const bookingSchema = new mongoose.Schema({
-//    "Faculty_ID": {
-//         "type": "String",
-//         "required":true
-//     },
-//     "Hall_ID": {
-//         "type": "String",
-//         "required":true
-//     },
-//     "Student_ID": {
-//         "type": "String",
-//         "required":true
-//     },
-//     "Department": {
-//         "type": "String",
-//         "required":true
-//     },
-//     "Affiliated": {
-//         "type": "String",
-//         "required":true
-//     },
-//     "Status": {
-//         "type": "String",
-//         "enum": ['rejected','approved','pending'],
-//         "default":'pending'
-//     },
-//     "Date": {
-//         "type": "Date",
-//         "required":true
-//     },
-//     "Time_From": {
-//         "type": "Date",
-//         "required":false
-//     },
-//     "Time_To": {
-//         "type": "Date",
-//         "required":false
-//     },
-//     "Reason": {
-//         "type": "String",
-//         "required":true
-//     }
-// })
-

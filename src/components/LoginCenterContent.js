@@ -7,7 +7,8 @@ function LoginCenterContent() {
   const navigate = useNavigate();
   const [Email, setEmail] = useState();
   const [Password, setPassword] = useState();
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     const data = {
       Email,
       Password,
@@ -21,7 +22,7 @@ function LoginCenterContent() {
     });
     if (userData) {
       const token = await userData.json();
-      localStorage.setItem("authToken", JSON.stringify(token.token));
+      localStorage.setItem("authToken", JSON.stringify(token));
       navigate("../student/dashboard");
     }
   };
