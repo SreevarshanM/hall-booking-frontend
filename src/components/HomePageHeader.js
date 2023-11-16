@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 function HomePageHeader() {
   return (
     <nav className="mt-5">
-      <div className="flex flex-wrap items-center justify-between p-1">
+      <div className="flex flex-col md:flex md:flex-row flex-wrap items-center justify-between p-1">
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium text-white flex flex-col p-4 items-center md:p-0 mt-4 md:flex-row md:space-x-8">
             <li>
@@ -35,14 +37,18 @@ function HomePageHeader() {
             </li>
           </ul>
         </div>
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+        <div
+          className="hidden w-full md:block md:w-auto"
+          style={{ show }}
+          id="navbar-default"
+        >
           <ul className="font-medium text-white flex flex-col items-center md:p-0 mt-4 md:flex-row md:space-x-4">
             <li>
               <a href="/register" className="hover:font-bold">
                 REGISTER
               </a>
             </li>
-            <div>|</div>
+            <div className="hidden md:block">|</div>
             <li>
               <a href="/login" className="hover:font-bold">
                 LOGIN
@@ -52,6 +58,7 @@ function HomePageHeader() {
         </div>
         <button
           data-collapse-toggle="navbar-default"
+          onClick={toggleNav}
           type="button"
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-default"
