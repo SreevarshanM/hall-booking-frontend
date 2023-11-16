@@ -1,7 +1,30 @@
 import email_id_input from "../assests/admin_profile_icon.png";
 import password_input from "../assests/password_input.png";
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function Admin_Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const data = {
+      email,
+      password,
+    };
+    const userData = await fetch("http://localhost:8800/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (userData) {
+      const token = await userData.json();
+      localStorage.setItem("authToken", JSON.stringify(token));
+      navigate("../admin/dashboard");
+    }
+  };
   return (
     <div>
       <div className="flex flex-col items-center justify-center px-6 my-20">
@@ -29,6 +52,8 @@ function Admin_Login() {
                     className="bg-neutral-100 text-blue sm:text-sm rounded-sm block w-full h-10 p-2.5"
                     placeholder="admin@fmail.com"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -50,11 +75,16 @@ function Admin_Login() {
                     className="bg-neutral-100 rounded-sm block w-full h-10 p-2.5"
                     placeholder="••••••••"
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
 
-              <button className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center">
+              <button
+                className="w-full text-white bg-sky-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
+                onClick={handleLogin}
+              >
                 Login
               </button>
             </form>

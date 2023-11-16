@@ -1,8 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 function StudentDashboardPendingRequests(props) {
-
   const [bookingData, setBookingData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("all");
 
@@ -14,19 +12,23 @@ function StudentDashboardPendingRequests(props) {
   bookingDate.setDate(bookingDate.getDate() - 1);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:8800/api/booking/userBookings?studentid=${userData.Student_ID}`
-      )
-      .then((response) => {
-        setBookingData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching hall data:", error);
-      });
+    const fetchData = async () => {
+      const data = await fetch(
+        "http://localhost:8800/api/booking/userBookings",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        }
+      );
+      const hallData = await data.json();
+
+      setBookingData(hallData);
+    };
+    fetchData();
   }, []);
-  console.log(bookingData);
-  //
 
   const filteredBookings =
     selectedStatus === "all"
@@ -45,7 +47,6 @@ function StudentDashboardPendingRequests(props) {
         return "bg-white cursor-default";
     }
   };
-
 
   const handleDivClick = (status, id) => {
     if (status === "approved") {
