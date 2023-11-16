@@ -7,6 +7,7 @@ function LoginCenterContent() {
   const navigate = useNavigate();
   const [Email, setEmail] = useState();
   const [Password, setPassword] = useState();
+  const [errorMessage,setErrorMessage] = useState(false)
   const handleLogin = async (e) => {
     e.preventDefault();
     const data = {
@@ -20,9 +21,21 @@ function LoginCenterContent() {
       },
       body: JSON.stringify(data),
     });
-    if (userData) {
+    
+    if (userData.status === 401) {
+      console.log("inavlid credentials...");
+      setErrorMessage(true);
+      setTimeout(() => {
+        setErrorMessage(false);
+      }, 4000);
+    }
+
+    if (userData.status === 200) {
       const token = await userData.json();
+
       localStorage.setItem("authToken", JSON.stringify(token));
+      console.log("token generated...");
+
       navigate("../student/dashboard");
     }
   };
@@ -34,6 +47,15 @@ function LoginCenterContent() {
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Login
             </h1>
+            {errorMessage && (<div role="alert">
+              <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+                Invalid Credentials !!!
+              </div>
+              <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
+                <p>Email or Password is incorrect.</p>
+              </div>
+            </div>
+            )}
             <form className="space-y-4 md:space-y-6" action="#">
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900">
