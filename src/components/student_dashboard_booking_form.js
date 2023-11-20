@@ -164,7 +164,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   type="text"
                   value={userData.Department}
                   readOnly
-                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md
+                   focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                 />
               </td>
             </tr>
@@ -180,7 +181,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   type="text"
                   value={selectedHall.Hall_Name}
                   readOnly
-                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md 
+                  focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                 />
               </td>
             </tr>
@@ -196,7 +198,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   onChange={(e) => {
                     setAffiliatedDept(e.target.value);
                   }}
-                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md
+                   focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                 />
               </td>
             </tr>
@@ -223,7 +226,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   id="TimeFrom"
                   value={Time_From}
                   onChange={handleTimeFromChange}
-                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md
+                   focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                   required
                 >
                   <option disabled value="">
@@ -252,7 +256,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   id="TimeTo"
                   value={Time_To}
                   onChange={handleTimeToChange}
-                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md
+                   focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                   required
                 >
                   <option disabled value="">
@@ -281,7 +286,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   onChange={(e) => {
                     setReason(e.target.value);
                   }}
-                  className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  className="bg-[#f8fafa] h-24 border border-gray-300 text-gray-900 text-md rounded-md
+                   focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                 />
               </td>
             </tr>
@@ -290,7 +296,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
 
         <button
           type="submit"
-          className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none
+           focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           Book Hall
         </button>

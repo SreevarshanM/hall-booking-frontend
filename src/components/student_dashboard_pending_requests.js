@@ -63,6 +63,8 @@ function StudentDashboardPendingRequests(props) {
   }; //DATE OPTIONS
   const timeOptions = { hour: "numeric", minute: "numeric" }; //TIME OPTIONS
 
+  console.log(filteredBookings);
+
   return (
     <div className="bg-neutral-100 w-full">
       <nav className="bg-white border-gray-200">
@@ -109,6 +111,7 @@ function StudentDashboardPendingRequests(props) {
 
       <div className="p-4 sm:p-10 max-h-[550px] overflow-y-auto">
         <ul>
+          {console.log(filteredBookings)}
           {filteredBookings.map((booking) => (
             <li className="p-2">
               <div
