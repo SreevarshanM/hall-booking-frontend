@@ -151,7 +151,7 @@ function StudentDashboardPendingRequests(props) {
                   </div>
                   <div className="text-sm">
                     <div>Submitted On :</div>
-                    <div>Timestamp to be added</div>
+                    <div>{new Date(booking.createdAt).toLocaleString()}</div>
                   </div>
                 </div>
               </div>

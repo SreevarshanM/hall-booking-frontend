@@ -74,7 +74,12 @@ function App() {
           />
           <Route
             path="admin/dashboard"
-            element={<AdminDashboardMainPage data={"dashboard"} />}
+            element={
+              <AdminDashboardMainPage
+                data={"dashboard"}
+                changeRefreshState={changeRefreshState}
+              />
+            }
           />
           <Route
             path="admin/dashboard/pending_requests"
