@@ -7,14 +7,17 @@ import message_icon_white from "../assests/message_icon_white.png";
 import logout_icon_grey from "../assests/logout_icon_grey.png";
 import profile from "../assests/admin_profile_icon.png";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboardSidebar(props) {
+  const navigate = useNavigate();
   const styles = {
     backgroundColor: "rgb(14, 165, 233)",
     color: "rgb(255, 255, 255)",
   };
 
   const [showModal, setShowModal] = useState(false);
+  const userData = JSON.parse(localStorage.getItem("authToken"));
 
   return (
     <div
@@ -34,7 +37,7 @@ function AdminDashboardSidebar(props) {
           <div className="bg-gray-300 h-14 w-14 mr-3 rounded-full flex justify-center items-center">
             <img src={profile} className="h-10 w-10" alt="profile-icon"></img>
           </div>
-          <div className="font-bold text-xl">SREE VARSHAN</div>
+          <div className="font-bold text-xl">{userData.adminName}</div>
         </div>
         <a
           className="block text-gray-500 py-2.5 px-4 my-2 rounded"
@@ -90,23 +93,24 @@ function AdminDashboardSidebar(props) {
             <div className="text-grey">Pending Requests</div>
           </div>
         </a>
+        <button
+          className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
+          onClick={() => {
+            setShowModal(true);
+          }}
+        >
+          <div className="flex items-center">
+            <img
+              src={logout_icon_grey}
+              className="h-5 w-5 mr-2"
+              alt="logout-icon"
+            ></img>
+            <div className="text-grey">Logout</div>
+          </div>
+        </button>
       </nav>
 
-      <button
-        className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
-        onClick={() => {
-          setShowModal(true);
-        }}
-      >
-        <div className="flex items-center">
-          <img
-            src={logout_icon_grey}
-            className="h-5 w-5 mr-2"
-            alt="logout-icon"
-          ></img>
-          <div className="text-grey">Logout</div>
-        </div>
-      </button>
+      
       {showModal ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -133,9 +137,9 @@ function AdminDashboardSidebar(props) {
                     onClick={(e) => {
                       e.preventDefault();
                       setShowModal(false);
-                      console.log(1);
                       localStorage.removeItem("authToken");
-                    }}
+                      navigate("/");
+                    }}  
                   >
                     Yes
                   </button>

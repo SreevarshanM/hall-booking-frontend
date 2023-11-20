@@ -115,9 +115,7 @@ function StudentDashboardSidebar(props) {
             <div className="text-grey">Booking Status</div>
           </div>
         </a>
-      </nav>
-
-      <button
+        <button
         className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
         onClick={() => setShowModal(true)}
       >
@@ -130,6 +128,7 @@ function StudentDashboardSidebar(props) {
           <div className="text-grey">Logout</div>
         </div>
       </button>
+      </nav>
       {showModal ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
