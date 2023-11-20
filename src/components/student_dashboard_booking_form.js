@@ -116,8 +116,11 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
     setTimeFrom(event.target.value);
   };
 
-  useEffect (() =>  {
-    const index = availableTimes.findIndex((time) => time.toLocaleTimeString() === new Date(Time_From).toLocaleTimeString());
+  useEffect(() => {
+    const index = availableTimes.findIndex(
+      (time) =>
+        time.toLocaleTimeString() === new Date(Time_From).toLocaleTimeString()
+    );
     const timeToOptions = availableTimes.slice(index + 1).map((time, index) => (
       <option key={index} value={time}>
         {time.toLocaleTimeString(undefined, {
@@ -127,9 +130,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
       </option>
     ));
     setTimeToOptions(timeToOptions);
-    console.log(index)
-    console.log(timeToOptions)
-  },[Time_From])
+  }, [Time_From]);
 
   const handleTimeToChange = (event) => {
     setTimeTo(event.target.value);
@@ -163,7 +164,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
           <span class="font-medium">Failed to create Booking!</span> Try again
           later.
         </div>
-      )} 
+      )}
 
       <form className="py-10 sm:pr-20" onSubmit={handleBooking}>
         <table className="table-auto w-full">
@@ -271,9 +272,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                   required
                 >
-                  <option disabled value="">
-                    Select a time
-                  </option>
+                  <option value="">Select a time</option>
                   {timeToOptions}
                 </select>
               </td>
@@ -296,7 +295,6 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
             </tr>
           </tbody>
         </table>
-
         <button
           type="submit"
           className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium mt-5 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -304,33 +302,6 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
           Book Hall
         </button>
       </form>
-      {showErrorMessage || showSuccessMessage && (
-      <div className="flex items-center justify-center h-screen">
-        <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="fixed z-10 bg-white p-8 rounded-lg shadow-lg">
-            {showSuccessMessage && (
-                <dialog id="my_modal_2" class="modal">
-                  <div class="modal-box">
-                    <h3 class="font-bold text-lg">Successful!</h3>
-                    <p class="py-4">Your Booking request has been successfully</p>
-                  </div>
-                  <form method="dialog" class="modal-backdrop">
-                    <button>close</button>
-                  </form>
-                </dialog>
-            )}
-
-            {showErrorMessage && (
-              <div
-              class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-              role="alert"
-            >
-              <span class="font-medium">Booking created successfully!</span>
-            </div>
-            )}
-          </div>
-      </div>
-      )}
     </div>
   );
 }

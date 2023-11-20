@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 function AdminPendingRequests(props) {
   const [bookingData, setBookingData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [refresh, setRefresh] = useState(true);
 
   //STUDENT ODA DETAILS
   const userData = JSON.parse(localStorage.getItem("authToken"));
@@ -28,7 +29,7 @@ function AdminPendingRequests(props) {
       setBookingData(hallData);
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
   const filteredBookings =
     selectedStatus === "all"
@@ -64,69 +65,70 @@ function AdminPendingRequests(props) {
   }; //DATE OPTIONS
   const timeOptions = { hour: "numeric", minute: "numeric" }; //TIME OPTIONS
 
-  const [remarks,setRemarks]=useState('')
-  const [approveModal,showOnApprove] = useState(false);
-  const [rejectModal,showOnReject] = useState(false);
-  
-  const handleReject = async (bookingId,rejectRemark) => {
+  const handleReject = async (bookingId) => {
     try {
-      const response = await fetch('http://localhost:8800/api/booking/updateBooking', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          _id: bookingId,
-          Status: "rejected",
-          Remark: rejectRemark // Adjust the status as needed
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8800/api/booking/updateBooking",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            _id: bookingId,
+            Status: "rejected",
+          }),
+        }
+      );
 
       if (response.ok) {
         // Handle success
-        console.log('Booking rejected successfully');
+        console.log("Booking rejected successfully");
+        setRefresh(refresh ? false : true);
         // Add any additional logic or state updates as needed
       } else {
         // Handle error
-        console.error('Failed to reject booking');
+        console.error("Failed to reject booking");
       }
-      showOnReject(false);
-      window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
-  const handleApprove = async (bookingId,approveRemark) => {
+  const handleApprove = async (bookingId) => {
     try {
-      const response = await fetch('http://localhost:8800/api/booking/updateBooking', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          _id: bookingId,
-          Status: "approved",
-          Remark: approveRemark // Adjust the status as needed
-        }),
-      });
-      console.log(response)
+      const response = await fetch(
+        "http://localhost:8800/api/booking/updateBooking",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            _id: bookingId,
+            Status: "approved",
+          }),
+        }
+      );
+      console.log(response);
       if (response.ok) {
         // Handle success
-        console.log('Booking Approved successfully');
+        const data = await response.json();
+        console.log(data);
+        console.log("Booking Approved successfully");
         // Add any additional logic or state updates as needed
       } else {
         // Handle error
-        console.error('Failed to reject booking');
+        console.error("Failed to reject booking");
       }
-      showOnApprove(false);
-      window.location.reload();
+
+      setRefresh(refresh ? false : true);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-
-
 
   return (
     <div className="bg-neutral-100 w-full">
@@ -176,10 +178,7 @@ function AdminPendingRequests(props) {
         <ul>
           {filteredBookings.map((booking) => (
             <li className="p-2">
-              <div
-                className={`${getStatusClassName(booking.Status)}`}
-                onClick={() => handleDivClick(booking.Status, booking._id)}
-              >
+              <div className={`${getStatusClassName(booking.Status)}`}>
                 <h5 className="mb-2 text-xl font-bold tracking-tight">
                   {booking.Hall_Name} |{" "}
                   {new Date(booking.Date).toLocaleDateString("en-US", options)}{" "}
@@ -198,7 +197,6 @@ function AdminPendingRequests(props) {
                   <div className="font-normal text-black text-sm">
                     <div>Affiliated Department/Club: {booking.Affiliated}</div>
                     <div>Reason : {booking.Reason}</div>
-                    {booking.Status !=='pending' ? <div>Remarks : {booking.Remark}</div> : null}
                   </div>
                   <div className="text-sm">
                     <div>Submitted On :</div>
@@ -206,107 +204,27 @@ function AdminPendingRequests(props) {
                   </div>
                 </div>
 
-                {booking.Status==='pending' ? (<div className="flex justify-end">
-                <button
-                  className="bg-green-500 text-white hover:bg-green-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg mr-2"
-                  onClick={() => showOnApprove(true)}
-                >
-                  Approve
-                </button>
-                <button
-                  className="bg-red-500 text-white hover:bg-red-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg"
-                  onClick={() => showOnReject(true)}
-                >
-                  Reject
-                </button>
-              </div>
-              ): null} 
-
-              {approveModal ? (
-        
-                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-                  <div className="relative w-128 h-128 mx-auto my-6">
-                    <div className="bg-white border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none p-8">
-                      <h2 className="text-3xl font-semibold mb-4 text-center">Approve Request</h2>
-                      <div className="mb-6">
-                        <p className="text-gray-700 text-center">Please provide remarks (if any) for approval::</p>
-                        <textarea
-                          className="w-full border rounded p-2"
-                          rows="4"
-                          value={remarks}
-                          onChange={(e) => setRemarks(e.target.value)}
-                        />
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          className="text-red-500 hover:bg-red-50 font-semibold px-4 py-2 text-md outline-none focus:outline-none mr-2"
-                          onClick={() => showOnApprove(false)}
-                        >
-                          Close
-                        </button>
-                        <button
-                          className="bg-sky-500 text-white hover:bg-sky-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none"
-                          onClick={() => handleApprove(booking._id,remarks)}
-                        >
-                          Approve
-                        </button>
-                      </div>
-                    </div>
+                {booking.Status === "pending" ? (
+                  <div className="flex justify-end">
+                    <button
+                      className="bg-green-500 text-white hover:bg-green-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg mr-2"
+                      onClick={() => handleApprove(booking._id)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="bg-red-500 text-white hover:bg-red-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg"
+                      onClick={() => handleReject(booking._id)}
+                    >
+                      Reject
+                    </button>
                   </div>
-                </div>
-                
-              ) : null}
-
-              {approveModal ? <div className="opacity-25 fixed inset-0 bg-black"></div> : null}
-              {rejectModal ? (
-                
-                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-                  <div className="relative w-128 h-128 mx-auto my-6">
-                    <div className="bg-white border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none p-8">
-                      {/* Header */}
-                      <h2 className="text-3xl font-semibold mb-4 text-center">Reject Request</h2>
-
-                      {/* Content */}
-                      <div className="mb-6">
-                        <p className="text-gray-700 text-center">Please provide reasons (if any) for rejection:</p>
-                        <textarea
-                          className="w-full border rounded p-2"
-                          rows="4"
-                          value={remarks}
-                          onChange={(e) => setRemarks(e.target.value)}
-                        />
-                      </div>
-
-                      {/* Footer */}
-                      <div className="flex justify-center">
-                        <button
-                          className="text-red-500 hover:bg-red-50 font-semibold px-4 py-2 text-md outline-none focus:outline-none mr-2"
-                          onClick={() => showOnReject(false)}
-                        >
-                          Close
-                        </button>
-                        <button
-                          className="bg-sky-500 text-white hover:bg-sky-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none"
-                          onClick={() => handleReject(booking._id,remarks)}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-              ) : null}
-
-              {rejectModal ? <div className="opacity-25 fixed inset-0 bg-black"></div> : null}
-  
+                ) : null}
               </div>
             </li>
-          ))
-          }
+          ))}
         </ul>
       </div>
-      
     </div>
   );
 }
