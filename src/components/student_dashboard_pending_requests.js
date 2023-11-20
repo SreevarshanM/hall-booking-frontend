@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
+import { usePDF } from "react-to-pdf";
 
 function StudentDashboardPendingRequests(props) {
   const [bookingData, setBookingData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [bookingPDFData, setBookingPDFData] = useState([{}]);
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
+  var style = {
+    display: "none",
+  };
 
   //STUDENT ODA DETAILS
   const userData = JSON.parse(localStorage.getItem("authToken"));
@@ -48,10 +55,16 @@ function StudentDashboardPendingRequests(props) {
     }
   };
 
-  const handleDivClick = (status, id) => {
+  const handleDivClick = (status, id, booking) => {
     if (status === "approved") {
       // Implement logic to print the approval PDF
       console.log(`Printing PDF for booking with ID: ${id}`);
+      setBookingPDFData([booking]);
+      setTimeout(() => {
+        document.getElementById("pdf").style.display = "block";
+        toPDF();
+        document.getElementById("pdf").style.display = "none";
+      }, 1000);
     }
   };
 
@@ -113,7 +126,9 @@ function StudentDashboardPendingRequests(props) {
             <li className="p-2">
               <div
                 className={`${getStatusClassName(booking.Status)}`}
-                onClick={() => handleDivClick(booking.status, booking._id)}
+                onClick={() =>
+                  handleDivClick(booking.Status, booking._id, booking)
+                }
               >
                 <h5 className="mb-2 text-xl font-bold tracking-tight">
                   {booking.Hall_Name} |{" "}
@@ -144,6 +159,32 @@ function StudentDashboardPendingRequests(props) {
           ))}
         </ul>
       </div>
+      {bookingPDFData.map((data) => (
+        <div ref={targetRef}>
+          <div className="hidden" id="pdf">
+            <div className="p-10">
+              <div className="text-[96px] text-center">
+                Booking Approval Form
+              </div>
+              <div className="text-3xl">
+                <div>
+                  This form is proof of approval for the following booking :
+                </div>
+                <div>Student Roll No : {data.Student_ID}</div>
+                <div>Department : {data.Department}</div>
+                <div>Affiliated Department : {data.Affiliated}</div>
+                <div>Date : {data.Date}</div>
+                <div>Time From : {data.Time_From}</div>
+                <div>Time TO : {data.Time_To}</div>
+                <div>Reason : {data.Reason}</div>
+                <br></br>
+                <br></br>
+                <div>Remarks from the Hall Incharge : {data.Remark}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

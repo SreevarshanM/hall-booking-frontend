@@ -138,8 +138,11 @@ function AdminDashboardSidebar(props) {
                       e.preventDefault();
                       setShowModal(false);
                       localStorage.removeItem("authToken");
+
+                      props.changeRefreshState();
                       navigate("/");
-                    }}  
+                    }}
+
                   >
                     Yes
                   </button>
