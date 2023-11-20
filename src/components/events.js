@@ -4,6 +4,7 @@ const events = [
     title: "Vivekanandha Auditorium",
     start: getDate("YEAR-MONTH-07"),
     end: getDate("YEAR-MONTH-10"),
+    color: "green"
   },
   {
     groupId: "999",

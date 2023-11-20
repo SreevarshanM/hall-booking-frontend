@@ -111,9 +111,26 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
     }
   }, [availableTimes]);
 
+  const [timeToOptions, setTimeToOptions] = useState([]);
   const handleTimeFromChange = (event) => {
     setTimeFrom(event.target.value);
   };
+
+  useEffect(() => {
+    const index = availableTimes.findIndex(
+      (time) =>
+        time.toLocaleTimeString() === new Date(Time_From).toLocaleTimeString()
+    );
+    const timeToOptions = availableTimes.slice(index + 1).map((time, index) => (
+      <option key={index} value={time}>
+        {time.toLocaleTimeString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </option>
+    ));
+    setTimeToOptions(timeToOptions);
+  }, [Time_From]);
 
   const handleTimeToChange = (event) => {
     setTimeTo(event.target.value);
@@ -231,7 +248,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                   required
                 >
                   <option disabled value="">
-                    Select a date
+                    Select a time
                   </option>
                   {availableTimes.map((time, index) => (
                     <option key={index} value={time}>
@@ -260,17 +277,8 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                    focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                   required
                 >
-                  <option disabled value="">
-                    Select a date
-                  </option>
-                  {availableTimes.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time.toLocaleTimeString(undefined, {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </option>
-                  ))}
+                  <option value="">Select a time</option>
+                  {timeToOptions}
                 </select>
               </td>
             </tr>
@@ -282,7 +290,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                 </label>
               </td>
               <td className="pt-4">
-                <input
+                <textarea
                   onChange={(e) => {
                     setReason(e.target.value);
                   }}
@@ -293,7 +301,6 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
             </tr>
           </tbody>
         </table>
-
         <button
           type="submit"
           className="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none

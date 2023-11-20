@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 function AdminPendingRequests(props) {
   const [bookingData, setBookingData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [refresh, setRefresh] = useState(true);
 
   //STUDENT ODA DETAILS
   const userData = JSON.parse(localStorage.getItem("authToken"));
@@ -28,7 +29,7 @@ function AdminPendingRequests(props) {
       setBookingData(hallData);
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
   const filteredBookings =
     selectedStatus === "all"
@@ -42,15 +43,16 @@ function AdminPendingRequests(props) {
       case "approved":
         return "block w-full p-4 bg-[#37b317] rounded-lg shadow-lg hover:bg-[#31a314] hover:cursor-default"; // cursor-pointer for clickable
       case "pending":
-        return "block w-full p-4 bg-[#fea501] rounded-lg shadow-lg hover:bg-[#f09c02] hover:cursor-default";
+        return "block w-full p-4 bg-[#c9c9c9] rounded-lg shadow-lg hover:bg-[#c0c0c0] hover:cursor-default";
       default:
         return "bg-white cursor-default";
     }
   };
 
+  const [showModal, setShowModal] = useState(false);
   const handleDivClick = (status, id) => {
-    if (status === "approved") {
-      // Implement logic to print the approval PDF
+    if (status === "pending") {
+      setShowModal(true);
       console.log(`Printing PDF for booking with ID: ${id}`);
     }
   };
@@ -62,6 +64,71 @@ function AdminPendingRequests(props) {
     day: "numeric",
   }; //DATE OPTIONS
   const timeOptions = { hour: "numeric", minute: "numeric" }; //TIME OPTIONS
+
+  const handleReject = async (bookingId) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8800/api/booking/updateBooking",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            _id: bookingId,
+            Status: "rejected",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Handle success
+        console.log("Booking rejected successfully");
+        setRefresh(refresh ? false : true);
+        // Add any additional logic or state updates as needed
+      } else {
+        // Handle error
+        console.error("Failed to reject booking");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleApprove = async (bookingId) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8800/api/booking/updateBooking",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            _id: bookingId,
+            Status: "approved",
+          }),
+        }
+      );
+      console.log(response);
+      if (response.ok) {
+        // Handle success
+        const data = await response.json();
+        console.log(data);
+        console.log("Booking Approved successfully");
+        // Add any additional logic or state updates as needed
+      } else {
+        // Handle error
+        console.error("Failed to reject booking");
+      }
+
+      setRefresh(refresh ? false : true);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="bg-neutral-100 w-full">
@@ -81,7 +148,7 @@ function AdminPendingRequests(props) {
                 <div>Approved</div>
               </li>
               <li className="flex items-center mr-2 text-sm sm:text-md">
-                <div className="h-4 w-6 bg-[#fea501] mr-2"></div>
+                <div className="h-4 w-6 bg-[#c9c9c9] mr-2"></div>
                 <div>Pending</div>
               </li>
             </ul>
@@ -111,10 +178,7 @@ function AdminPendingRequests(props) {
         <ul>
           {filteredBookings.map((booking) => (
             <li className="p-2">
-              <div
-                className={`${getStatusClassName(booking.Status)}`}
-                onClick={() => handleDivClick(booking.status, booking._id)}
-              >
+              <div className={`${getStatusClassName(booking.Status)}`}>
                 <h5 className="mb-2 text-xl font-bold tracking-tight">
                   {booking.Hall_Name} |{" "}
                   {new Date(booking.Date).toLocaleDateString("en-US", options)}{" "}
@@ -136,9 +200,26 @@ function AdminPendingRequests(props) {
                   </div>
                   <div className="text-sm">
                     <div>Submitted On :</div>
-                    <div>Timestamp to be added</div>
+                    <div>{new Date(booking.createdAt).toLocaleString()}</div>
                   </div>
                 </div>
+
+                {booking.Status === "pending" ? (
+                  <div className="flex justify-end">
+                    <button
+                      className="bg-green-500 text-white hover:bg-green-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg mr-2"
+                      onClick={() => handleApprove(booking._id)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="bg-red-500 text-white hover:bg-red-600 font-semibold text-md px-4 py-2 rounded shadow hover:shadow-lg"
+                      onClick={() => handleReject(booking._id)}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </li>
           ))}

@@ -93,23 +93,24 @@ function AdminDashboardSidebar(props) {
             <div className="text-grey">Pending Requests</div>
           </div>
         </a>
+        <button
+          className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
+          onClick={() => {
+            setShowModal(true);
+          }}
+        >
+          <div className="flex items-center">
+            <img
+              src={logout_icon_grey}
+              className="h-5 w-5 mr-2"
+              alt="logout-icon"
+            ></img>
+            <div className="text-grey">Logout</div>
+          </div>
+        </button>
       </nav>
 
-      <button
-        className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
-        onClick={() => {
-          setShowModal(true);
-        }}
-      >
-        <div className="flex items-center">
-          <img
-            src={logout_icon_grey}
-            className="h-5 w-5 mr-2"
-            alt="logout-icon"
-          ></img>
-          <div className="text-grey">Logout</div>
-        </div>
-      </button>
+      
       {showModal ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -137,9 +138,11 @@ function AdminDashboardSidebar(props) {
                       e.preventDefault();
                       setShowModal(false);
                       localStorage.removeItem("authToken");
+
                       props.changeRefreshState();
                       navigate("/");
                     }}
+
                   >
                     Yes
                   </button>

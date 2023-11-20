@@ -165,7 +165,7 @@ function StudentDashboardPendingRequests(props) {
                   </div>
                   <div className="text-sm">
                     <div>Submitted On :</div>
-                    <div>{formatISODate(booking.createdAt).slice(0, 32)}</div>
+                    <div>{new Date(booking.createdAt).toLocaleString()}</div>
                   </div>
                 </div>
               </div>
