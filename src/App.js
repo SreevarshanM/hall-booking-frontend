@@ -57,19 +57,28 @@ function App() {
           <Route
             path="student/dashboard/hall_booking"
             element={
-              <StudentDashboardHallBookingMainPage data={"hall_booking"} />
+              <StudentDashboardHallBookingMainPage
+                data={"hall_booking"}
+                changeRefreshState={changeRefreshState}
+              />
             }
           />
           <Route
             path="student/dashboard/pending_requests"
             element={
-              <StudentDashboardPendingRequests data={"pending_requests"} />
+              <StudentDashboardPendingRequests
+                data={"pending_requests"}
+                changeRefreshState={changeRefreshState}
+              />
             }
           />
           <Route
             path="student/dashboard/hall_availability"
             element={
-              <StudentDashboardHallAvailability data={"hall_availability"} />
+              <StudentDashboardHallAvailability
+                data={"hall_availability"}
+                changeRefreshState={changeRefreshState}
+              />
             }
           />
           <Route
