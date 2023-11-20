@@ -10,6 +10,7 @@ import logout_icon_grey from "../assests/logout_icon_grey.png";
 import profile from "../assests/email_id_input.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Popup_Modal from "./popup_modal";
 
 function StudentDashboardSidebar(props) {
   const styles = {

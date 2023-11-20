@@ -1,6 +1,7 @@
 // import Datepicker from "tailwind-datepicker-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import PopupModal from "./popup_modal";
 
 function StudentDashboardHallBookingBookingForm({ selectedHall }) {
   //GET HALLS FROM halls SCHEMA FROM MONGO
@@ -25,7 +26,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8800/api/halls")
+      .get("https://au-hallbooking-backend.onrender.com/api/halls")
       .then((response) => {
         setHalls(response.data);
       })
@@ -50,7 +51,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
       };
 
       const hallBooked = await fetch(
-        " http://localhost:8800/api/booking/createBooking",
+        " https://au-hallbooking-backend.onrender.com/api/booking/createBooking",
         {
           method: "POST",
           headers: {
@@ -91,7 +92,7 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
     if (selectedDate) {
       console.log("Fetching available time slots...");
       fetch(
-        `http://localhost:8800/api/booking/availableslots?hallname=${selectedHall.Hall_Name}&date=${selectedDate}`
+        `https://au-hallbooking-backend.onrender.com/api/booking/availableslots?hallname=${selectedHall.Hall_Name}&date=${selectedDate}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -148,22 +149,19 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
         Fill the following details and click submit to book the hall
       </div>
       {showSuccessMessage && (
-        <div
-          class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-          role="alert"
-        >
-          <span class="font-medium">Booking created successfully!</span>
-        </div>
+        <PopupModal
+          setShowModal={setShowSuccessMessage}
+          message={
+            "Your request has been sucessfully sent to the hall incharge."
+          }
+        />
       )}
 
       {showErrorMessage && (
-        <div
-          class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-          role="alert"
-        >
-          <span class="font-medium">Failed to create Booking!</span> Try again
-          later.
-        </div>
+        <PopupModal
+          setShowModal={setShowErrorMessage}
+          message={"There occured error, please try again."}
+        />
       )}
 
       <form className="py-10 sm:pr-20" onSubmit={handleBooking}>
@@ -228,7 +226,13 @@ function StudentDashboardHallBookingBookingForm({ selectedHall }) {
                 </label>
               </td>
               <td>
-                <input type="date" onChange={handleDateChange} />
+                <input
+                  type="date"
+                  className="bg-[#f8fafa] border border-gray-300 text-gray-900 text-md rounded-md
+                  focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
+                  onChange={handleDateChange}
+                  min={new Date().toISOString().split("T")[0]}
+                />
               </td>
             </tr>
             <tr>

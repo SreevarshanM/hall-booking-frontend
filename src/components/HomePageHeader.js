@@ -82,7 +82,6 @@ function HomePageHeader() {
           className="inline-flex items-center p-2 text-lg w-8 h-8 justify-center text-gray-500 rounded-lg md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-default"
           aria-expanded="false"
-          onClick={toggleNav}
         >
           {" "}
           {!toggleMenu && <i className="fa-solid fa-bars text-gray-300"></i>}

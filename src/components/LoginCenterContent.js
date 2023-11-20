@@ -14,13 +14,16 @@ function LoginCenterContent() {
       Email,
       Password,
     };
-    const userData = await fetch("http://localhost:8800/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const userData = await fetch(
+      "https://au-hallbooking-backend.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (userData.status !== 200) {
       console.log("inavlid credentials...");

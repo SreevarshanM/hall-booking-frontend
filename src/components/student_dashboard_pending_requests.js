@@ -21,7 +21,7 @@ function StudentDashboardPendingRequests(props) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetch(
-        "http://localhost:8800/api/booking/userBookings",
+        "https://au-hallbooking-backend.onrender.com/api/booking/userBookings",
         {
           method: "GET",
           headers: {

@@ -4,19 +4,20 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 function CalendarCom() {
-  const [events,setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8800/api/booking/allBookings")
+      .get(
+        "https://au-hallbooking-backend.onrender.com/api/booking/allBookings"
+      )
       .then((response) => {
         const extractedEvents = response.data.map((booking) => ({
           start: booking.Time_From, // Replace with the actual property names in your API response
           end: booking.Time_To,
           color: getEventColor(booking.Status),
-          title: booking.Hall_Name
+          title: booking.Hall_Name,
         }));
 
         setEvents(extractedEvents);

@@ -17,6 +17,7 @@
     "react-scripts": "^5.0.1",
     "react-to-pdf": "^1.0.1",
     "tailwind-datepicker-react": "^1.4.3",
+    "tw-elements-react": "^1.0.0-alpha2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
