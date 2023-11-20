@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
+import { usePDF } from "react-to-pdf";
 
 function StudentDashboardPendingRequests(props) {
   const [bookingData, setBookingData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [bookingPDFData, setBookingPDFData] = useState([{}]);
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
+  var style = {
+    display: "none",
+  };
 
   //STUDENT ODA DETAILS
   const userData = JSON.parse(localStorage.getItem("authToken"));
@@ -30,6 +37,17 @@ function StudentDashboardPendingRequests(props) {
     fetchData();
   }, []);
 
+  const formatISODate = (isoDate) =>
+    new Date(isoDate).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      timeZoneName: "short",
+    });
+
   const filteredBookings =
     selectedStatus === "all"
       ? bookingData
@@ -48,10 +66,16 @@ function StudentDashboardPendingRequests(props) {
     }
   };
 
-  const handleDivClick = (status, id) => {
+  const handleDivClick = (status, id, booking) => {
     if (status === "approved") {
       // Implement logic to print the approval PDF
       console.log(`Printing PDF for booking with ID: ${id}`);
+      setBookingPDFData([booking]);
+      setTimeout(() => {
+        document.getElementById("pdf").style.display = "block";
+        toPDF();
+        document.getElementById("pdf").style.display = "none";
+      }, 1000);
     }
   };
 
@@ -66,7 +90,7 @@ function StudentDashboardPendingRequests(props) {
   console.log(filteredBookings);
 
   return (
-    <div className="bg-neutral-100 w-full">
+    <div className="bg-neutral-100 w-full min-h-[70vh]">
       <nav className="bg-white border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="flex items-center flex-wrap">
@@ -116,7 +140,9 @@ function StudentDashboardPendingRequests(props) {
             <li className="p-2">
               <div
                 className={`${getStatusClassName(booking.Status)}`}
-                onClick={() => handleDivClick(booking.status, booking._id)}
+                onClick={() =>
+                  handleDivClick(booking.Status, booking._id, booking)
+                }
               >
                 <h5 className="mb-2 text-xl font-bold tracking-tight">
                   {booking.Hall_Name} |{" "}
@@ -139,7 +165,7 @@ function StudentDashboardPendingRequests(props) {
                   </div>
                   <div className="text-sm">
                     <div>Submitted On :</div>
-                    <div>Timestamp to be added</div>
+                    <div>{formatISODate(booking.createdAt).slice(0, 32)}</div>
                   </div>
                 </div>
               </div>
@@ -147,6 +173,73 @@ function StudentDashboardPendingRequests(props) {
           ))}
         </ul>
       </div>
+      {bookingPDFData.map((Booking) => (
+        <div ref={targetRef}>
+          <div className="hidden p-20 text-2xl" id="pdf">
+            <div class="text-5xl font-bold mb-4">{Booking.Department}</div>
+
+            <div class="mb-4">
+              {formatISODate(Booking.createdAt).slice(0, 32)}
+            </div>
+
+            <div class="text-[40px] font-bold mb-6">
+              Subject: Approval Confirmation for Event Booking
+            </div>
+
+            <p class="mb-4">Dear Student of {Booking.Affiliated},</p>
+
+            <p class="mb-4 text-justify">
+              I am pleased to inform you that your request for booking an event
+              at {Booking.Hall_Name} on behalf of {Booking.Department}
+              has been <strong>approved</strong>. We appreciate your effort in
+              planning this event, and we are confident that it will be a
+              success.
+            </p>
+
+            <div class="mb-4">
+              <strong class="text-5xl mb-6">Booking Details:</strong>
+              <div class="mt-6">
+                <br></br>- <strong>Date:</strong>
+                {formatISODate(Booking.createdAt).slice(0, 32)}
+                <br></br>- <strong>Time:</strong> {Booking.Time_From}
+                <br></br>- <strong>Venue: </strong> {Booking.Hall_Name}
+              </div>
+            </div>
+
+            <div class="mb-6 text-justify">
+              <strong class="text-5xl mb-6">Terms and Conditions:</strong>
+
+              <div class="mt-6">
+                <br></br>
+                1. The booking is confirmed for the specified date and time.
+                <br></br>
+                2. Any changes to the event details must be communicated in
+                writing and approved in advance.<br></br>
+                3. The event organizer is responsible for adhering to the
+                venue's policies and regulations.
+              </div>
+            </div>
+
+            <p class="mb-4 text-justify">
+              We trust that you will organize a memorable and successful event.
+            </p>
+
+            <p class="mb-4 text-justify">
+              Thank you for choosing {Booking.Department} for your event, and we
+              look forward to hosting a successful gathering.
+            </p>
+
+            <div class="text-5xl font-bold mt-6">
+              Best regards,<br></br>
+              <div className="text-2xl font-semibold mt-6">
+                Hall Incharge<br></br>
+                {Booking.Department}
+                <br></br>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

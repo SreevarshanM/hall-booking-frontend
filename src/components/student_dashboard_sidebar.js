@@ -16,6 +16,26 @@ function StudentDashboardSidebar(props) {
     backgroundColor: "rgb(14, 165, 233)",
     color: "rgb(255, 255, 255)",
   };
+
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const changeWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", changeWidth);
+
+    return () => {
+      window.removeEventListener("resize", changeWidth);
+    };
+  }, []);
+
+  const toggleNav = () => {
+    setToggleMenu(!toggleMenu);
+  };
+
   const [userData, setUserData] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
@@ -27,109 +47,117 @@ function StudentDashboardSidebar(props) {
 
   return (
     <div
-      className="p-2 bg-white w-full flex justify-end md:w-96 md:flex md:flex-col md:justify-between"
+      className="p-2 bg-white w-full flex flex-col justify-end md:w-96 md:flex md:flex-col md:justify-between"
       id="sideNav"
     >
-      <div className="md:hidden flex items-center">
+      <div className="md:hidden flex justify-end">
         <button
           id="menuBtn"
-          className="bg-neutral-100 p-2 rounded w-8 h-8 flex justify-center items-center hover:bg-neutral-300"
+          onClick={toggleNav}
+          className="bg-zinc-300 p-2 rounded w-8 h-8 flex justify-center items-center hover:bg-neutral-300"
         >
-          <i className="fa-solid fa-bars"></i>
+          {!toggleMenu && <i className="fa-solid fa-bars"></i>}
+          {toggleMenu && <i class="fa-solid fa-xmark"></i>}
         </button>
       </div>
-      <nav className="hidden md:block">
-        <div className="flex justify-start items-center mt-2 mb-6 p-2">
-          <div className="bg-gray-300 h-14 w-14 mr-3 rounded-full flex justify-center items-center">
-            <img src={profile} className="h-10 w-10" alt="profile-icon"></img>
+      {(toggleMenu || screenWidth > 768) && (
+        <nav className="w-full md:block">
+          <div className="flex justify-start items-center mt-2 mb-6 p-2">
+            <div className="bg-gray-300 h-14 w-14 mr-3 rounded-full flex justify-center items-center">
+              <img src={profile} className="h-10 w-10" alt="profile-icon"></img>
+            </div>
+            <div className="font-bold text-xl">{userData.Student_Name}</div>
           </div>
-          <div className="font-bold text-xl">{userData.Student_Name}</div>
-        </div>
-        <a
-          className="block text-gray-500 py-2.5 px-4 my-2 rounded"
-          style={props.data === "dashboard" ? styles : {}}
-          href="/student/dashboard"
+          <a
+            className="block text-gray-500 py-2.5 px-4 my-2 rounded"
+            style={props.data === "dashboard" ? styles : {}}
+            href="/student/dashboard"
+          >
+            <div className="flex items-center">
+              <img
+                src={
+                  props.data === "dashboard"
+                    ? dashboard_icon_white
+                    : dashboard_icon_grey
+                }
+                className="h-5 w-5 mr-2"
+                alt="dashboard-icon"
+              ></img>
+              <div className="text-grey">Dashboard</div>
+            </div>
+          </a>
+          <a
+            className="block text-gray-500 py-2.5 px-4 my-2 rounded"
+            style={props.data === "hall_availability" ? styles : {}}
+            href="/student/dashboard/hall_availability"
+          >
+            <div className="flex items-center">
+              <img
+                src={
+                  props.data === "hall_availability"
+                    ? calendar_icon_white
+                    : calendar_icon_grey
+                }
+                className="h-5 w-5 mr-2"
+                alt="hall-icon"
+              ></img>
+              <div className="text-grey">Hall Availability</div>
+            </div>
+          </a>
+          <a
+            className="block text-gray-500 py-2.5 px-4 my-2 rounded"
+            style={props.data === "hall_booking" ? styles : {}}
+            href="/student/dashboard/hall_booking"
+          >
+            <div className="flex items-center">
+              <img
+                src={
+                  props.data === "hall_booking"
+                    ? hall_icon_white
+                    : hall_icon_grey
+                }
+                className="h-5 w-5 mr-2"
+                alt="calendar-icon"
+              ></img>
+              <div className="text-grey">Hall Booking</div>
+            </div>
+          </a>
+          <a
+            className="block text-gray-500 py-2.5 px-4 my-2 rounded"
+            style={props.data === "pending_requests" ? styles : {}}
+            href="/student/dashboard/pending_requests"
+          >
+            <div className="flex items-center">
+              <img
+                src={
+                  props.data === "pending_requests"
+                    ? message_icon_white
+                    : message_icon_grey
+                }
+                className="h-5 w-5 mr-2"
+                alt="message-icon"
+              ></img>
+              <div className="text-grey">Booking Status</div>
+            </div>
+          </a>
+        </nav>
+      )}
+      {(toggleMenu || screenWidth >= 768) && (
+        <button
+          className="text-gray-500 w-full pb-2.5 md:py-2.5 px-4 md:my-2 rounded md:flex"
+          onClick={() => setShowModal(true)}
         >
           <div className="flex items-center">
             <img
-              src={
-                props.data === "dashboard"
-                  ? dashboard_icon_white
-                  : dashboard_icon_grey
-              }
+              src={logout_icon_grey}
               className="h-5 w-5 mr-2"
-              alt="dashboard-icon"
+              alt="logout-icon"
             ></img>
-            <div className="text-grey">Dashboard</div>
+            <div className="text-grey">Logout</div>
           </div>
-        </a>
-        <a
-          className="block text-gray-500 py-2.5 px-4 my-2 rounded"
-          style={props.data === "hall_availability" ? styles : {}}
-          href="/student/dashboard/hall_availability"
-        >
-          <div className="flex items-center">
-            <img
-              src={
-                props.data === "hall_availability"
-                  ? calendar_icon_white
-                  : calendar_icon_grey
-              }
-              className="h-5 w-5 mr-2"
-              alt="hall-icon"
-            ></img>
-            <div className="text-grey">Hall Availability</div>
-          </div>
-        </a>
-        <a
-          className="block text-gray-500 py-2.5 px-4 my-2 rounded"
-          style={props.data === "hall_booking" ? styles : {}}
-          href="/student/dashboard/hall_booking"
-        >
-          <div className="flex items-center">
-            <img
-              src={
-                props.data === "hall_booking" ? hall_icon_white : hall_icon_grey
-              }
-              className="h-5 w-5 mr-2"
-              alt="calendar-icon"
-            ></img>
-            <div className="text-grey">Hall Booking</div>
-          </div>
-        </a>
-        <a
-          className="block text-gray-500 py-2.5 px-4 my-2 rounded"
-          style={props.data === "pending_requests" ? styles : {}}
-          href="/student/dashboard/pending_requests"
-        >
-          <div className="flex items-center">
-            <img
-              src={
-                props.data === "pending_requests"
-                  ? message_icon_white
-                  : message_icon_grey
-              }
-              className="h-5 w-5 mr-2"
-              alt="message-icon"
-            ></img>
-            <div className="text-grey">Booking Status</div>
-          </div>
-        </a>
-      </nav>
+        </button>
+      )}
 
-      <button
-        className="text-gray-500 w-full py-2.5 px-4 my-2 rounded hidden md:flex"
-        onClick={() => setShowModal(true)}
-      >
-        <div className="flex items-center">
-          <img
-            src={logout_icon_grey}
-            className="h-5 w-5 mr-2"
-            alt="logout-icon"
-          ></img>
-          <div className="text-grey">Logout</div>
-        </div>
-      </button>
       {showModal ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">

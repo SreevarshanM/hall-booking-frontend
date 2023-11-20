@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 function HomePageHeader() {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -24,9 +24,9 @@ function HomePageHeader() {
     <nav className="mt-5">
       <div className="">
         {(toggleMenu || screenWidth > 768) && (
-          <div className="flex flex-col md:flex md:flex-row flex-wrap items-center justify-between p-1">
+          <div className="flex flex-wrap items-center justify-between p-1">
             <div className="w-full md:block md:w-auto" id="navbar-default">
-              <ul className="gap-5 font-medium text-white flex flex-col p-4 items-center md:p-0 mt-4 md:flex-row md:space-x-8">
+              <ul className="gap-3 font-medium text-white flex flex-col p-4 items-center md:p-0 mt-4 md:flex-row md:space-x-8">
                 <li>
                   <a href="/" className="">
                     <i className="fa-solid fa-house text-3xl"></i>
@@ -58,9 +58,8 @@ function HomePageHeader() {
                 </li>
               </ul>
             </div>
-
             <div className="w-full md:block md:w-auto" id="navbar-default">
-              <ul className="gap-5 font-medium text-white flex flex-col items-center md:p-0 mt-4 md:flex-row md:space-x-4">
+              <ul className="gap-3 font-medium text-white flex flex-col items-center md:p-0 md:mt-4 md:flex-row md:space-x-4">
                 <li>
                   <a href="/register" className="hover:font-bold">
                     REGISTER
@@ -79,21 +78,15 @@ function HomePageHeader() {
         <button
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          onClick={toggleNav}
+          className="inline-flex items-center p-2 text-lg w-8 h-8 justify-center text-gray-500 rounded-lg md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-default"
           aria-expanded="false"
           onClick={toggleNav}
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5 text-grau-200"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path stroke="currentColor" d="M1 1h15M1 7h15M1 13h15" />
-          </svg>
+          {" "}
+          {!toggleMenu && <i className="fa-solid fa-bars text-gray-300"></i>}
+          {toggleMenu && <i class="fa-solid fa-xmark text-gray-300"></i>}
         </button>
       </div>
     </nav>
