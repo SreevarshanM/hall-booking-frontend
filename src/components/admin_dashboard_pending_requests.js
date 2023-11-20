@@ -68,7 +68,7 @@ function AdminPendingRequests(props) {
   const handleReject = async (bookingId) => {
     try {
       const response = await fetch(
-        "https://au-hallbooking-backend.onrender.com/booking/updateBooking",
+        "https://au-hallbooking-backend.onrender.com/api/booking/updateBooking",
         {
           method: "PATCH",
           headers: {
