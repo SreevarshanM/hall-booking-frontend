@@ -38,7 +38,7 @@ function CalendarCom() {
     }
   };
   return (
-    <div className="w-full p-8 bg-zinc-100">
+    <div className="w-full p-2 md:p-8 bg-zinc-100">
       <div className="bg-white p-5">
         <FullCalendar
           defaultView="dayGridMonth"

@@ -79,20 +79,14 @@ function HomePageHeader() {
           data-collapse-toggle="navbar-default"
           type="button"
           onClick={toggleNav}
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          className="inline-flex items-center p-2 text-lg w-8 h-8 justify-center text-gray-500 rounded-lg md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-default"
           aria-expanded="false"
+          onClick={toggleNav}
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5 text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path stroke="currentColor" d="M1 1h15M1 7h15M1 13h15" />
-          </svg>
+          {" "}
+          {!toggleMenu && <i className="fa-solid fa-bars text-gray-300"></i>}
+          {toggleMenu && <i class="fa-solid fa-xmark text-gray-300"></i>}
         </button>
       </div>
     </nav>
