@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { usePDF } from "react-to-pdf";
-import BookingModel from "../../../hall-booking-backend/models/BookingModel";
 
 function StudentDashboardPendingRequests(props) {
   const [bookingData, setBookingData] = useState([]);
@@ -89,7 +88,7 @@ function StudentDashboardPendingRequests(props) {
   const timeOptions = { hour: "numeric", minute: "numeric" }; //TIME OPTIONS
 
   return (
-    <div className="bg-neutral-100 w-full">
+    <div className="bg-neutral-100 w-full min-h-[70vh]">
       <nav className="bg-white border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="flex items-center flex-wrap">
@@ -171,20 +170,22 @@ function StudentDashboardPendingRequests(props) {
           ))}
         </ul>
       </div>
-      {bookingPDFData.map((data) => (
+      {bookingPDFData.map((Booking) => (
         <div ref={targetRef}>
-          <div className="hidden" id="pdf">
-            <div class="text-2xl font-bold mb-4">{Booking.Department}</div>
+          <div className="hidden p-20 text-2xl" id="pdf">
+            <div class="text-5xl font-bold mb-4">{Booking.Department}</div>
 
-            <div class="mb-4">{Booking.createdAt}</div>
+            <div class="mb-4">
+              {formatISODate(Booking.createdAt).slice(0, 32)}
+            </div>
 
-            <div class="text-3xl font-bold mb-6">
+            <div class="text-[40px] font-bold mb-6">
               Subject: Approval Confirmation for Event Booking
             </div>
 
             <p class="mb-4">Dear Student of {Booking.Affiliated},</p>
 
-            <p class="mb-4">
+            <p class="mb-4 text-justify">
               I am pleased to inform you that your request for booking an event
               at {Booking.Hall_Name} on behalf of {Booking.Department}
               has been <strong>approved</strong>. We appreciate your effort in
@@ -193,41 +194,45 @@ function StudentDashboardPendingRequests(props) {
             </p>
 
             <div class="mb-4">
-              <strong class="text-xl">Booking Details:</strong>
-              <strong>Date:</strong> {Booking.Date}
-              <br></br>- <strong>Time:</strong> {Booking.Time_From}
-              <br></br>- <strong>Venue: </strong> {Booking.Hall_Name}
+              <strong class="text-5xl mb-6">Booking Details:</strong>
+              <div class="mt-6">
+                <br></br>- <strong>Date:</strong>
+                {formatISODate(Booking.createdAt).slice(0, 32)}
+                <br></br>- <strong>Time:</strong> {Booking.Time_From}
+                <br></br>- <strong>Venue: </strong> {Booking.Hall_Name}
+              </div>
             </div>
 
-            <div class="mb-6">
-              <strong class="text-xl">Terms and Conditions:</strong>
-              <br></br>
-              1. The booking is confirmed for the specified date and time.
-              <br></br>
-              2. Any changes to the event details must be communicated in
-              writing and approved in advance.<br></br>
-              3. The event organizer is responsible for adhering to the venue's
-              policies and regulations.
+            <div class="mb-6 text-justify">
+              <strong class="text-5xl mb-6">Terms and Conditions:</strong>
+
+              <div class="mt-6">
+                <br></br>
+                1. The booking is confirmed for the specified date and time.
+                <br></br>
+                2. Any changes to the event details must be communicated in
+                writing and approved in advance.<br></br>
+                3. The event organizer is responsible for adhering to the
+                venue's policies and regulations.
+              </div>
             </div>
 
-            <p class="mb-4">
+            <p class="mb-4 text-justify">
               We trust that you will organize a memorable and successful event.
-              If you have any further questions or require additional support,
-              please do not hesitate to contact our events team at [Contact
-              Email] or [Contact Phone Number].
             </p>
 
-            <p class="mb-4">
-              Thank you for choosing [Your Company/Organization] for your event,
-              and we look forward to hosting a successful gathering.
+            <p class="mb-4 text-justify">
+              Thank you for choosing {Booking.Department} for your event, and we
+              look forward to hosting a successful gathering.
             </p>
 
-            <div class="text-lg font-bold mt-6">
+            <div class="text-5xl font-bold mt-6">
               Best regards,<br></br>
-              [Your Name]<br></br>
-              [Your Position]<br></br>
-              [Your Company/Organization]<br></br>
-              [Your Contact Information]
+              <div className="text-2xl font-semibold mt-6">
+                Hall Incharge<br></br>
+                {Booking.Department}
+                <br></br>
+              </div>
             </div>
           </div>
         </div>

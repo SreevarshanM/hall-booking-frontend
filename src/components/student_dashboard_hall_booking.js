@@ -88,7 +88,7 @@ function StudentDashboardHallBookingHallList() {
         />
       }
       {!show && !showBF && (
-        <div className="p-10 bg-zinc-100">
+        <div className="p-5 md:p-10 bg-zinc-100">
           <div className="text-3xl font-semibold text-green-700 mb-5">
             HALL DETAILS
           </div>
